@@ -1,0 +1,11 @@
+{
+  "assets": [
+    {
+      "uid": "example-not-a-real-uid",
+      "key": "",
+      "yawOffset": 90,
+      "footprintScale": 1.0,
+      "skip": false
+    }
+  ]
+}

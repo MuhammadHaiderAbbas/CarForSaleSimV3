@@ -103,3 +103,51 @@ Unity is available, and check the editor Console on the first build for missing-
 - Not committed and not needed in git: the downloaded GLBs, Unity's `Library/`, `GeneratedArt/`.
 - If you fork/redistribute the game **with** the models, keep `docs/FINAL_MAP_ASSETS.md` and
   `THIRD_PARTY_NOTICES.txt` in the distribution (CC BY requires the attribution).
+
+## Repairing a build with bad / missing assets
+
+If the first build shows placeholder-ish or broken models, work the list in this order:
+
+1. **Read the audit.** Run **Tools → Car Sales → Final Map → Audit Final Map**. It loads every GLB
+   the manifest knows about, force-reimports the ones Unity skipped, and writes `final-map-audit.md`
+   to the project root with a verdict per asset: `OK` · `MISSING FILE` (download it) · `FAILED TO IMPORT`
+   (the **asset import worker crashed** — Unity 6 enforces a per-import memory ceiling on big GLBs;
+   close other apps, reimport that single GLB via right-click → *Reimport*, and if it keeps crashing,
+   delete just that one file so the Final Map falls back to its stand-in instead of hanging the editor) ·
+   `IMPORTED WITH MISSING MATERIALS` · `NO RENDERERS`.
+2. **Fix materials in the open scene.** **Tools → Car Sales → Final Map → Repair Missing Materials
+   (Open Scene)** replaces every empty material slot and every material whose shader Unity could not
+   locate with a URP/Lit grey (`Assets/CarSales/Gen/Materials/ImportRecovery.mat`) so the scene is
+   presentable while broken imports are fixed. Save (Ctrl+S) afterwards.
+3. **Fix orientation / scale per asset.** Edit `Assets/CarSales/FinalMap/final-map-overrides.json`
+   (format below) and re-run **Build Final Map**; the builder applies the override when placing.
+   - `yawOffset` — degrees added to the placement yaw (e.g. `180` turns a building around).
+   - `footprintScale` — multiplies the footprint the model is scaled to (e.g. `1.5` = 50% larger).
+   - `skip` — `true` means "don't place this GLB" (the stand-in is used instead). Use this for GLBs
+     that crash the import worker or are the wrong model entirely.
+   - Each entry matches by `uid` (preferred, from the manifest / docs/FINAL_MAP_ASSETS.md) or by `key`.
+   - Delete the `example-not-a-real-uid` entry before shipping.
+4. **Rebuild** (**Tools → Car Sales → Final Map → Build Final Map**) and re-audit. Repeat until the
+   report reads the way you want it.
+
+### final-map-overrides.json format
+
+```json
+{
+  "assets": [
+    { "uid": "4958b4ac23eb445aaa6115278676d5df", "yawOffset": 0,   "footprintScale": 1.0 },
+    { "uid": "<uid from the manifest>",          "yawOffset": 90,  "footprintScale": 1.25, "skip": false },
+    { "key": "car_sedan_01",                     "yawOffset": 180, "footprintScale": 0.9 }
+  ]
+}
+```
+
+All of the above is per-model and judged by eye in the scene view — Unity cannot know which way an
+arbitrary GLB faces, so there is no automatic fix for orientation; the override table is the mechanism.
+
+### Asset import worker crashes ("AssetImportWorkerHW1 has crashed", 20:10 / 20:11 in the Console)
+
+Not a project bug — Unity ran out of memory importing the biggest GLBs (max ~87 MB / ~1.5M faces).
+Mitigations: close Chrome/other heavy apps before Unity, import big GLBs one at a time, or `skip: true`
+them in the overrides file. Unity logs the exact file it was importing when the worker died
+(`Editor.log`, next to `Importing ...`) — check it to identify the culprit.

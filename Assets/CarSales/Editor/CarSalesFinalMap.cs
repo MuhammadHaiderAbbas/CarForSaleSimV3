@@ -211,6 +211,14 @@ namespace CarSales.EditorTools
         /// </summary>
         static bool TryPlaceGlb(Transform parent, FinalMapAsset asset, Vector3 localCentre, Vector3 footprint, float yawDeg, bool allowSidewaysFlip, string what)
         {
+            var ov = FindOverride(asset);
+            if (ov != null && ov.skip)
+            {
+                buildReport.Add($"· {what}: skipped by override (Assets/CarSales/FinalMap/final-map-overrides.json); using a stand-in");
+                Debug.LogWarning($"[CarSales] Final Map: '{what}' is skipped by final-map-overrides.json.");
+                return false;
+            }
+            if (ov != null) { yawDeg += ov.yawOffset; footprint *= ov.footprintScale; }
             var prefab = string.IsNullOrEmpty(asset?.importPath) ? null : AssetDatabase.LoadAssetAtPath<GameObject>(asset.importPath);
             if (asset == null)
             {
