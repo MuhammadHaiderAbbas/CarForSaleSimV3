@@ -26,7 +26,7 @@ namespace CarSales
         {
             var net = RoadNetwork.Instance ? RoadNetwork.Instance : FindAnyObjectByType<RoadNetwork>();
             var segs = net && net.segments.Count > 0 ? net.segments : CarSales.Sim.Town.Segments();
-            var lights = net && net.lightNodes.Count > 0 ? net.lightNodes : CarSales.Sim.Town.LightNodes;
+            IList<V2> lights = net && net.lightNodes.Count > 0 ? net.lightNodes : CarSales.Sim.Town.LightNodes;
             lanes = RoadGraph.Build(segs, net ? net.roadWidth : 9f, 6f, lights);
             BuildLights();
             if (!FindAnyObjectByType<PerformanceGovernor>()) gameObject.AddComponent<PerformanceGovernor>();

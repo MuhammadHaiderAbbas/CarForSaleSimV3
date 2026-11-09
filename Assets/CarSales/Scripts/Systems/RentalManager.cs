@@ -150,7 +150,7 @@ namespace CarSales
                 {
                     c.lateNotifiedFor = e.Day;
                     if (CarSalesServices.Messages)
-                        CarSalesServices.Messages.Add(MessageType.Warning, "Rental overdue", $"{c.carName} (out to {c.renterName}) is {late} day(s) late. Return it from the Rentals app — late fees come out of the £{c.deposit:N0} deposit.");
+                        CarSalesServices.Messages.Add(MessageType.Info, "Rental overdue", $"{c.carName} (out to {c.renterName}) is {late} day(s) late. Return it from the Rentals app — late fees come out of the £{c.deposit:N0} deposit.");
                 }
             }
             Changed();
