@@ -288,7 +288,7 @@ namespace CarSales.EditorTools
             }
             // Sign on the roof + a blue light bar (emissive only) + flag pole.
             Solid(g, "SignBoard", new Vector3(0f, glb ? 8.6f : 5.4f, 1.35f), new Vector3(13f, 1.5f, 0.35f), m.signBoard);
-            SignText(g, new Vector3(0f, glb ? 8.6f : 5.4f, 1.14f), "PATROL STATION", 5f, Color.white, new Vector2(12f, 1.2f), 180f);
+            SignText(g, new Vector3(0f, glb ? 8.6f : 5.4f, 1.14f), "PATROL STATION", 5f, Color.white, new Vector2(12f, 1.2f), 0f);
             var bar = Solid(g, "LightBar", new Vector3(0f, glb ? 9.6f : 6.6f, 6f), new Vector3(3.2f, 0.34f, 0.6f), m.signBoard);
             bar.GetComponent<Renderer>().sharedMaterial = m.lampGlow;
             Deco(g, "FlagPole", PrimitiveType.Cylinder, new Vector3(10.5f, 4f, 3f), new Vector3(0.14f, 8f, 0.14f), m.metal);
@@ -303,7 +303,7 @@ namespace CarSales.EditorTools
             Solid(g, "Workshop", new Vector3(0f, 2.1f, 6f), new Vector3(17f, 4.2f, 11f), m.buildings[0]);
             Solid(g, "WorkshopRoof", new Vector3(0f, 4.3f, 6f), new Vector3(17.5f, 0.25f, 11.5f), m.roof);
             Deco(g, "SignBoard", PrimitiveType.Cube, new Vector3(0f, 5.3f, 0.35f), new Vector3(15f, 1.4f, 0.3f), m.flagRed);
-            SignText(g, new Vector3(0f, 5.3f, 0.14f), "TYRES & WHEELS", 4.6f, Color.white, new Vector2(14f, 1.1f), 180f);
+            SignText(g, new Vector3(0f, 5.3f, 0.14f), "TYRES & WHEELS", 4.6f, Color.white, new Vector2(14f, 1.1f), 0f);
             Deco(g, "Door", PrimitiveType.Cube, new Vector3(0f, 1.5f, 0.36f), new Vector3(4.2f, 3f, 0.12f), m.metal);
             foreach (float x in new[] { -6f, 6f }) Glass(g, "Window", new Vector3(x, 1.7f, 0.36f), new Vector3(3.4f, 1.7f, 0.1f), m.windowGlass);
             // Tyre stacks out front, hubcaps against the wall.
@@ -330,8 +330,8 @@ namespace CarSales.EditorTools
                 Glass(g, "ShowGlass", new Vector3(0f, 1.5f, 2.38f), new Vector3(10f, 2f, 0.1f), m.windowGlass);
             }
             Solid(g, "SignBoard", new Vector3(0f, office ? 6.4f : 4.6f, 2.32f), new Vector3(15f, 1.5f, 0.32f), m.flagRed);
-            SignText(g, new Vector3(0f, office ? 6.4f : 4.6f, 2.1f), "RENTGO", 5f, Color.white, new Vector2(13f, 1.2f), 180f);
-            SignText(g, new Vector3(0f, office ? 5.35f : 3.6f, 2.1f), "RENTALS & SALES", 2.6f, new Color(1f, 0.85f, 0.3f), new Vector2(12f, 0.7f), 180f);
+            SignText(g, new Vector3(0f, office ? 6.4f : 4.6f, 2.1f), "RENTGO", 5f, Color.white, new Vector2(13f, 1.2f), 0f);
+            SignText(g, new Vector3(0f, office ? 5.35f : 3.6f, 2.1f), "RENTALS & SALES", 2.6f, new Color(1f, 0.85f, 0.3f), new Vector2(12f, 0.7f), 0f);
             // Display cars out front - static, for show only (not in stock, not for sale, no CarVisual).
             var carAssets = new List<FinalMapAsset>();
             foreach (var cat in new[] { "car_hatchback", "car_sedan", "car_suv", "car_sports" })
@@ -374,7 +374,7 @@ namespace CarSales.EditorTools
                 }
                 Solid(g, "Entrance", new Vector3(0f, 2.1f, 1.85f), new Vector3(5f, 4.2f, 0.3f), m.flagWhite);
                 Deco(g, "SignBoard", PrimitiveType.Cube, new Vector3(0f, height + 1.1f, 2f), new Vector3(footprint.x * 0.8f, 1.6f, 0.3f), m.signBoard);
-                SignText(g, new Vector3(0f, height + 1.1f, 1.78f), sign, 4.4f, Color.white, new Vector2(footprint.x * 0.75f, 1.3f), 180f);
+                SignText(g, new Vector3(0f, height + 1.1f, 1.78f), sign, 4.4f, Color.white, new Vector2(footprint.x * 0.75f, 1.3f), 0f);
                 Solid(g, "Parking", new Vector3(0f, 0.006f, -3.5f), new Vector3(footprint.x + 10f, 0.012f, 6f), m.asphalt);
                 StreetLamp(g, new Vector3(-footprint.x / 2f - 1f, 0f, 0f), 0.8f, 1.4f, m);
                 StreetLamp(g, new Vector3(footprint.x / 2f + 1f, 0f, 0f), 0.8f, 1.4f, m);
@@ -465,8 +465,9 @@ namespace CarSales.EditorTools
                     for (float y = 1.8f; y < 8f; y += 3.2f)
                         Deco(g, "FloorLine", PrimitiveType.Cube, new Vector3(0f, y, -0.55f), new Vector3(17.2f, 0.15f, 0.08f), m.frame);
                 }
-                Solid(g, "SignBoard", new Vector3(0f, 10.4f, -0.7f), new Vector3(14f, 1.4f, 0.3f), m.signBoard);
-                SignText(g, new Vector3(0f, 10.4f, -0.92f), displayName.ToUpperInvariant(), 4f, Color.white, new Vector2(13f, 1.1f), 0f);
+                Solid(g, "TotemPole", new Vector3(-9f, 1.5f, -2.6f), new Vector3(0.35f, 3f, 0.35f), m.metal);
+                Solid(g, "TotemSign", new Vector3(-9f, 3.6f, -2.6f), new Vector3(9f, 1.6f, 0.3f), m.signBoard);
+                SignText(g, new Vector3(-9f, 3.6f, -2.82f), displayName.ToUpperInvariant(), 3.4f, Color.white, new Vector2(8.6f, 1.2f), 0f);
                 for (int i = 0; i < 6; i++) Deco(g, "Bay", PrimitiveType.Cube, new Vector3(-12.5f + i * 5f, 0.014f, -1.5f), new Vector3(0.12f, 0.01f, 9f), m.line);
             }
 
@@ -489,7 +490,7 @@ namespace CarSales.EditorTools
             // Road signs for the two new roads.
             var j0 = Group(env, "BusinessParkSigns");
             RoadSign(j0, new Vector3(112f, 0f, -133f), 0f, "SOUTHSIDE BUSINESS PARK", m.flagBlue, Color.white, 5.2f);
-            RoadSign(j0, new Vector3(140f, 0f, -147f), 90f, "HORIZON DRIVE · RING ROAD", m.flagWhite, new Color(0.1f, 0.1f, 0.12f), 4.6f);
+            RoadSign(j0, new Vector3(140f, 0f, -147f), 270f, "HORIZON DRIVE · RING ROAD", m.flagWhite, new Color(0.1f, 0.1f, 0.12f), 4.6f);
         }
 
         /// <summary>
