@@ -84,6 +84,28 @@ namespace CarSales.EditorTools
                 "OK");
         }
 
+        /// <summary>Rewrites the MainMenu scene's MainMenuUI.gameScene (the wizard bakes "DealershipTest"; a Final Map build flips it).</summary>
+        static void PointMainMenuAt(string sceneName)
+        {
+            if (!File.Exists(MenuScenePath))
+            {
+                Debug.LogWarning("[CarSales] Final Map: MainMenu.unity not found - the main menu still points at DealershipTest. Run '2. Build Everything' once.");
+                return;
+            }
+            var menu = EditorSceneManager.OpenScene(MenuScenePath, OpenSceneMode.Additive);
+            int flipped = 0;
+            foreach (var root in menu.GetRootGameObjects())
+                foreach (var ui in root.GetComponentsInChildren<MainMenuUI>(true))
+                {
+                    SetString(ui, "gameScene", sceneName);
+                    flipped++;
+                }
+            EditorSceneManager.MarkSceneDirty(menu);
+            EditorSceneManager.SaveScene(menu);
+            EditorSceneManager.CloseScene(menu, true);
+            Debug.Log($"[CarSales] Final Map: main menu now loads '{sceneName}' ({flipped} MainMenuUI component(s)).");
+        }
+
         static void BuildFinalMap()
         {
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) throw new OperationCanceledException();
@@ -102,6 +124,8 @@ namespace CarSales.EditorTools
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             Progress("Building the Final Map", 0.1f);
             BuildSceneCore(mats, db, carDisplay, customer, actions, CarSales.Sim.FinalMapPlan.Version, FinalScenePath, finalMap: true);
+            Progress("Main menu", 0.95f);
+            PointMainMenuAt(Path.GetFileNameWithoutExtension(FinalScenePath));   // the menu scene is re-created by 'Build Everything' and always points at DealershipTest
 
             Progress("Saving", 0.97f);
             AssetDatabase.SaveAssets();
