@@ -1,0 +1,38 @@
+# Unity
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+*.csproj
+*.sln
+*.suo
+*.user
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.apk
+*.aab
+*.unitypackage
+.vs/
+.vscode/
+.idea/
+crashlytics-build.properties
+sysinfo.txt
+.DS_Store
+
+# Phase 13: generated surface textures (rebuilt automatically)
+/Assets/CarSales/GeneratedArt/
+/Assets/CarSales/GeneratedArt.meta
+
+# Phase 14: the Sketchfab models (a few GB) are downloaded with tools/download_sketchfab_assets.py, never committed
+/Assets/CarSales/Sketchfab/
+/Assets/CarSales/Sketchfab.meta
