@@ -80,6 +80,7 @@ namespace CarSales.Studio.EditorTools
                         if (c.Title == "Characters" && GUILayout.Button("Fix", GUILayout.Width(60))) CharacterSetupWindow.Open();
                         if (c.Title == "Game name & company" || c.Title == "Version") if (GUILayout.Button("Fix", GUILayout.Width(60))) SettingsService.OpenProjectSettings("Project/Player");
                         if (c.Title == "Asset licences" && GUILayout.Button("Fix", GUILayout.Width(60))) EditorApplication.ExecuteMenuItem("Tools/Car Sales/Asset Studio");
+                        if (c.Title == "Car brands" && GUILayout.Button("Rename", GUILayout.Width(60))) RenameTrademarkCars.Run();
                     }
                 }
             }
