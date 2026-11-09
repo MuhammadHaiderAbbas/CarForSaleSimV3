@@ -13,7 +13,8 @@ import sys
 MANIFEST = "Assets/CarSales/FinalMap/final-map-assets.json"
 DOC = "docs/FINAL_MAP_ASSETS.md"
 
-manifest = json.load(open(MANIFEST))
+with open(MANIFEST, encoding="utf-8") as _f:
+    manifest = json.load(_f)
 assets = manifest["assets"]
 by_category = collections.OrderedDict()
 for a in sorted(assets, key=lambda x: (x["category"], x["key"])):

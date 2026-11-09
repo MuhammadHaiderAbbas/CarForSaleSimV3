@@ -36,7 +36,8 @@ def main():
     if not TOKEN:
         print("Set SKETCHFAB_TOKEN=<your token> first.", file=sys.stderr)
         return 2
-    manifest = json.load(open(MANIFEST))
+    with open(MANIFEST, encoding="utf-8") as _f:
+        manifest = json.load(_f)
     assets = manifest["assets"]
     print(f"{len(assets)} assets in manifest; downloading into {OUT_ROOT}/ (skipping > {SKIP_OVER_MB:.0f} MB)")
 
@@ -152,7 +153,7 @@ def main():
         print(f"[{i+1}/{len(assets)}] OK   {a['name']!r:60s} {size/1e6:7.1f} MB")
         time.sleep(0.15)
 
-    with open(REPORT, "w") as f:
+    with open(REPORT, "w", encoding="utf-8") as f:
         json.dump({"downloaded": ok, "skippedTooLarge": skipped, "failed": failed,
                    "totalBytes": total_bytes, "assets": report}, f, indent=1)
     print(f"\nDone: {ok} downloaded ({total_bytes/1e9:.2f} GB), {skipped} skipped (too large), {failed} failed. Report: {REPORT}")
