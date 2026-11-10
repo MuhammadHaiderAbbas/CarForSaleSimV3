@@ -11,7 +11,14 @@ SKETCHFAB_TOKEN=<your token> python3 tools/download_sketchfab_assets.py
 ```
 
 (Token: sketchfab.com → Settings → Password & API. The files land in `Assets/CarSales/Sketchfab/`.)
-After downloading, open Unity and run **Tools → Car Sales → Final Map → Build Final Map**.
+
+Then verify every download **before** opening Unity:
+
+```
+python3 tools/preflight_assets.py     # writes docs/ASSET_PREFLIGHT.md
+```
+
+and see docs/ASSET_MAP.md for which model lands on which map site. After that, run **Tools → Car Sales → Final Map → Build Final Map** in Unity.
 
 **80 assets kept** · licences: by ×72, cc0 ×8
 
