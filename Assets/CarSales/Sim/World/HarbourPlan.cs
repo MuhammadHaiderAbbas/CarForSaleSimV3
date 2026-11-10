@@ -272,4 +272,43 @@ namespace CarSales.Sim
 
         public static bool IsRoundabout(V2 p) => Roundabouts.Any(r => V2.Distance(r.Centre, p) < 1f);
     }
+
+    /// <summary>Turns a junction node into a small one-way ring (clockwise seen from above: the UK way round).</summary>
+    public static class Roundabout
+    {
+        public const int MinPoints = 8;
+
+        public static List<RoadSegment> Expand(List<RoadSegment> segments, V2 centre, float radius)
+        {
+            var result = new List<RoadSegment>();
+            var attach = new List<V2>();
+            float limit = 8.9f;
+            foreach (var s in segments)
+            {
+                bool aHere = V2.Distance(s.a, centre) < 1f, bHere = V2.Distance(s.b, centre) < 1f;
+                if (!aHere && !bHere) { result.Add(s); continue; }
+                var seg = s;
+                if (aHere) { var p = centre + (s.b - centre).Normalized * radius; seg.a = p; attach.Add(p); }
+                if (bHere) { var p = centre + (s.a - centre).Normalized * radius; seg.b = p; attach.Add(p); }
+                result.Add(seg);
+            }
+            if (attach.Count == 0) return result;
+            // Ring points: the attachments plus extra points so the ring is round enough.
+            var angles = attach.Select(p => Angle(p - centre)).ToList();
+            for (int k = 0; k < MinPoints; k++)
+            {
+                double a = k * 2 * Math.PI / MinPoints + Math.PI / MinPoints;
+                if (angles.All(x => AngleGap(x, a) > Math.PI / MinPoints * 0.6)) angles.Add(a);
+            }
+            angles.Sort();
+            angles.Reverse();   // decreasing angle = clockwise seen from above (x east, z north)
+            var pts = angles.Select(a => centre + new V2((float)Math.Cos(a), (float)Math.Sin(a)) * radius).ToList();
+            for (int i = 0; i < pts.Count; i++)
+                result.Add(new RoadSegment(pts[i], pts[(i + 1) % pts.Count], limit) { oneWay = true });
+            return result;
+        }
+
+        static double Angle(V2 v) { double a = Math.Atan2(v.z, v.x); return a < 0 ? a + 2 * Math.PI : a; }
+        static double AngleGap(double a, double b) { double d = Math.Abs(a - b) % (2 * Math.PI); return d > Math.PI ? 2 * Math.PI - d : d; }
+    }
 }
