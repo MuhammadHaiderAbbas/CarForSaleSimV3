@@ -146,7 +146,7 @@ namespace CarSales.EditorTools
                 Vector3 plotCentre = root.TransformPoint(new Vector3((site.FX0 + site.FX1) / 2f, 0f, (site.FZ0 + site.FZ1) / 2f));
                 go.transform.position += new Vector3(plotCentre.x - b.center.x, root.position.y - b.min.y, plotCentre.z - b.center.z);
                 foreach (var t in go.GetComponentsInChildren<Transform>(true)) t.gameObject.isStatic = true;
-                Debug.Log($"[CarSales] Map slot '{site.siteId}': '{prefab.name}' fitted to the plot ({hidden} generated object(s) hidden).");
+                Debug.Log($"[CarSales] Map slot '{slot.siteId}': '{prefab.name}' fitted to the plot ({hidden} generated object(s) hidden).");
             }
         }
     }
@@ -220,7 +220,7 @@ namespace CarSales.EditorTools
             EditorGUILayout.HelpBox(
                 "Upload one model per site (any prefab or .glb/.fbx). At build time the uploaded model replaces the site's generated building " +
                 "— ground, lot lines, fences, signs, lamps and trees are kept. Zones and coordinates come from the Harbour City plan.",
-                MessageType.None);
+                UnityEditor.MessageType.None);
             EditorGUILayout.Space(4);
 
             int assigned = rows.Values.Count(r => r.picked);
@@ -276,7 +276,7 @@ namespace CarSales.EditorTools
             }
             EditorGUILayout.EndScrollView();
 
-            if (!string.IsNullOrEmpty(status)) EditorGUILayout.HelpBox(status, MessageType.Info);
+            if (!string.IsNullOrEmpty(status)) EditorGUILayout.HelpBox(status, UnityEditor.MessageType.Info);
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Apply (save slots file)", GUILayout.Height(28))) Apply();
             if (GUILayout.Button("Apply + Build Harbour City", GUILayout.Height(28)))
