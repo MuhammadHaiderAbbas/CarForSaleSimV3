@@ -140,7 +140,10 @@ fuel_station, mechanic_workshop, hillside_villa, patrol_station
 | ref_tower_crane.jpg | lattice mast, jib, counterweights, hook — for the construction sites |
 | ref_roundabout_aerial.jpg | ring-road + roundabout geometry for new-map layouts |
 
-`docs/images/town-plan.png` — the master plan drawing (authoritative geometry for zones).
+`docs/images/final-map.png` — **the final map, rendered exactly from the plan file** (roads, zones, sites, glyphs, lights, legend; regenerate with `python3 tools/render_plan_map.py`).
+`docs/images/master-map.png` — the same render for the master map (V2).
+`docs/images/final-map-aerial.jpg` — cinematic aerial mood shot of the same town (AI render, not to scale).
+`docs/images/town-plan.png` — the original master plan drawing (historical reference).
 
 ## 8. One-glance "everything in the project" table
 
