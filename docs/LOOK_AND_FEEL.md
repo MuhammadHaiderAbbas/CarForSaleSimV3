@@ -32,7 +32,7 @@ The images live and die on sky. Concrete steps:
 
 ## 3) Hero assets (high-poly, used sparingly)
 
-Use the audit (**Tools → Car Sales → Final Map → Audit Final Map**) to place the heavyweights
+Use the audit (**Tools → Car Sales → Harbour City → Audit Harbour City**) to place the heavyweights
 selectively. The manifest's biggest faces:
 
 | Faces | Size | Asset | Where it goes |
@@ -60,15 +60,15 @@ in Asset Studio > Interiors.
 
 - Wet reflections + warm key light + cool fill at dusk — that is **Ultra quality + the rain toggle + HDRI**, not a filter.
 - Depth/haze on the horizon — fog/colour grading; keep Ultra, don't stack extra fog in Volume profiles.
-- Flag poles, banners, tyre stacks, string lights — these exist in the Final Map builder
+- Flag poles, banners, tyre stacks, string lights — these exist in the Harbour City builder
   (Tyre shop stacks, RentGo string lights, patrol light bar); the GLB props (KPI street props) can add more
   via **Tools → Car Sales → World Builder** on a per-site basis.
 
-## 6) Importing the heavy GLBs without killing Unity (repeat of docs/FINAL_MAP.md)
+## 6) Importing the heavy GLBs without killing Unity (repeat of docs/HARBOUR_CITY.md)
 
 1. Close other apps first. 2. Import one at a time. 3. If the import worker crashes on a GLB,
    open it in free Blender → scale textures to 2048 px → re-export → replace the file → reimport.
-4. If it still crashes, mark that asset `"skip": true` in `final-map-overrides.json` — the Final Map
+4. If it still crashes, mark that asset `"skip": true` in `harbour-city-overrides.json` — the Harbour City
    uses a stand-in instead (the build never hard-fails).
 
 ## 7) Screenshot procedure (match the images for store/marketing)

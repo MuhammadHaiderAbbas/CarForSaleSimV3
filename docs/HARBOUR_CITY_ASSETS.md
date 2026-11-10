@@ -1,6 +1,6 @@
-# Final Map — Sketchfab asset list
+# Harbour City — Sketchfab asset list
 
-*Generated from `Assets/CarSales/FinalMap/final-map-assets.json` — do not edit by hand; edit the manifest and re-run `tools/manifest_docs.py`.*
+*Generated from `Assets/CarSales/HarbourCity/harbour-city-assets.json` — do not edit by hand; edit the manifest and re-run `tools/manifest_docs.py`.*
 
 Every model below was found and verified through the public Sketchfab Data API v3 (downloadable,
 licence checked, face count recorded). **Files are not committed to this repository** (the full set is
@@ -18,7 +18,7 @@ Then verify every download **before** opening Unity:
 python3 tools/preflight_assets.py     # writes docs/ASSET_PREFLIGHT.md
 ```
 
-and see docs/ASSET_MAP.md for which model lands on which map site. After that, run **Tools → Car Sales → Final Map → Build Final Map** in Unity.
+and see docs/ASSET_MAP.md for which model lands on which map site. After that, run **Tools → Car Sales → Harbour City → Build Harbour City** in Unity.
 
 **80 assets kept** · licences: by ×72, cc0 ×8
 

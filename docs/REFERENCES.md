@@ -107,7 +107,7 @@
 |---|---|
 | `Scripts/CarSales.Runtime.asmdef` | Runtime assembly. Only compiles when Input System, AI Navigation and uGUI are installed (*define constraints*) |
 | `Input/CarSalesControls.inputactions` | Action map **CarSales**: Move, Look, Jump, Sprint, Interact, ToggleShop, CloseMenu |
-| `Generated/…` | Created by the wizard: 15 materials, 8 car models, 8 `CarDefinition`s + `CarDatabase`, prefabs, `MainMenu` + `DealershipTest` scenes + NavMesh |
+| `Generated/…` | Created by the wizard: 15 materials, 8 car models, 8 `CarDefinition`s + `CarDatabase`, prefabs, `MainMenu` + `HarbourCity` scenes + NavMesh |
 
 ### Generated car list (fictional)
 

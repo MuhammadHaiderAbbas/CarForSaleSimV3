@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Regenerates docs/FINAL_MAP_ASSETS.md from Assets/CarSales/FinalMap/final-map-assets.json so the
+Regenerates docs/HARBOUR_CITY_ASSETS.md from Assets/CarSales/HarbourCity/harbour-city-assets.json so the
 document always matches the manifest (kept assets, attribution, exclusions and why).
 
     python3 tools/manifest_docs.py
@@ -10,8 +10,8 @@ import collections
 import datetime
 import sys
 
-MANIFEST = "Assets/CarSales/FinalMap/final-map-assets.json"
-DOC = "docs/FINAL_MAP_ASSETS.md"
+MANIFEST = "Assets/CarSales/HarbourCity/harbour-city-assets.json"
+DOC = "docs/HARBOUR_CITY_ASSETS.md"
 
 with open(MANIFEST, encoding="utf-8") as _f:
     manifest = json.load(_f)
@@ -22,7 +22,7 @@ for a in sorted(assets, key=lambda x: (x["category"], x["key"])):
 
 total_bytes = sum(a.get("glbBytes") or 0 for a in assets)
 lines = []
-lines.append("# Final Map — Sketchfab asset list")
+lines.append("# Harbour City — Sketchfab asset list")
 lines.append("")
 lines.append(f"*Generated from `{MANIFEST}` — do not edit by hand; edit the manifest and re-run `tools/manifest_docs.py`.*")
 lines.append("")
@@ -35,7 +35,7 @@ lines.append("SKETCHFAB_TOKEN=<your token> python3 tools/download_sketchfab_asse
 lines.append("```")
 lines.append("")
 lines.append("(Token: sketchfab.com → Settings → Password & API. The files land in `Assets/CarSales/Sketchfab/`.)")
-lines.append("After downloading, open Unity and run **Tools → Car Sales → Final Map → Build Final Map**.")
+lines.append("After downloading, open Unity and run **Tools → Car Sales → Harbour City → Build Harbour City**.")
 lines.append("")
 lines.append(f"**{len(assets)} assets kept** · licences: " + ", ".join(f"{k} ×{v}" for k, v in sorted(manifest.get("licenceCount", {}).items())))
 lines.append("")

@@ -24,8 +24,8 @@ namespace CarSales.EditorTools
         }
 
         /// <summary>
-        /// The town from the plan (Town when finalMap, i.e. the Final Map; TownPlan otherwise). Every site is built at its plan position.
-        /// finalMap also builds the Final-Map-only POIs (patrol station, tyres, rent-a-car lot, business park, the two construction plots).
+        /// The town from the plan (Harbour City). Every site is built at its plan position.
+        /// finalMap also builds the Harbour City POIs (patrol station, tyres, rent-a-car lot, business park, the two construction plots).
         /// </summary>
         static TownRefs BuildTown(Transform env, Mats m, CarDatabase db, CarDisplay carDisplayPrefab, CustomerAI customerPrefab, bool finalMap = false)
         {
@@ -62,7 +62,7 @@ namespace CarSales.EditorTools
 
             Progress("Park, town centre, industrial estate", 0.68f);
             BuildZoneDecor(env, m, finalMap);
-            if (finalMap) BuildFinalMapExtras(env, m);
+            if (finalMap) BuildHarbourCityExtras(env, m);
             return refs;
         }
 
@@ -212,37 +212,6 @@ namespace CarSales.EditorTools
                 Vector3 s = alongX ? new Vector3(3f, 0.01f, 0.18f) : new Vector3(0.18f, 0.01f, 3f);
                 Deco(g, "LaneDash", PrimitiveType.Cube, p, s, m.line);
             }
-        }
-
-        static void BuildRoads(Transform g, Mats m)
-        {
-            Road(g, new Vector3(0f, 0f, -27f), 500f, true, m);
-            Road(g, new Vector3(0f, 0f, 95f), 500f, true, m);
-            Road(g, new Vector3(-70f, 0f, 34f), 113f, false, m);
-            Road(g, new Vector3(70f, 0f, 34f), 113f, false, m);
-            // Sidewalks along the two long roads
-            foreach (float z in new[] { -33.2f, 101.2f })
-                Solid(g, "Sidewalk", new Vector3(0f, 0.06f, z), new Vector3(500f, 0.12f, 2.4f), m.sidewalk);
-        }
-
-        static void BuildStreetTrees(Transform g, Mats m)
-        {
-            for (float x = -230f; x <= 230f; x += 23f)
-            {
-                if (Mathf.Abs(x - 40f) < 15f || Mathf.Abs(x + 45f) < 15f || Mathf.Abs(x - 100f) < 15f || Mathf.Abs(x + 100f) < 20f) continue;
-                Tree(g, new Vector3(x, 0f, -36f), m, 0.9f + Mathf.Abs(Mathf.Sin(x)) * 0.3f);
-            }
-            for (float z = -15f; z <= 85f; z += 20f)
-            {
-                Tree(g, new Vector3(-77f, 0f, z), m, 1f);
-                Tree(g, new Vector3(77f, 0f, z), m, 1f);
-            }
-            // Street lamps along the main road (emissive only - cheap)
-            for (float x = -220f; x <= 220f; x += 40f)
-                foreach (float z in new[] { -32f, 100f })
-                {
-                    StreetLamp(g, new Vector3(x, 0f, z), z < 0 ? 0.8f : -0.8f, 1.4f, m);
-                }
         }
 
         static void Tree(Transform g, Vector3 pos, Mats m, float s)

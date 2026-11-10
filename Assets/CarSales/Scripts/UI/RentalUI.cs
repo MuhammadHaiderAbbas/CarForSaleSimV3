@@ -6,7 +6,7 @@ using UnityEngine;
 namespace CarSales
 {
     /// <summary>
-    /// Rentals app (phase 14, Final Map): put any forecourt car out on hire for 1-30 days,
+    /// Rentals app: put any forecourt car out on hire for 1-30 days,
     /// see what is out, who has it, when it is due back and what the late fees are — then return it.
     /// The competitor lot next to Luxury Lane (RentGo) runs the same business; this is how you compete with it.
     /// </summary>

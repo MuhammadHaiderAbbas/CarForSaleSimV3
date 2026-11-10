@@ -1,9 +1,9 @@
-# Final Map — asset placement sheet
+# Harbour City — asset placement sheet
 
-*Generated from `Assets/CarSales/FinalMap/final-map-assets.json` + placement table in `tools/asset_map_docs.py` — re-run `python3 tools/asset_map_docs.py` after any manifest or builder change.*
+*Generated from `Assets/CarSales/HarbourCity/harbour-city-assets.json` + placement table in `tools/asset_map_docs.py` — re-run `python3 tools/asset_map_docs.py` after any manifest or builder change.*
 
-Site numbers refer to the exact map render: **docs/images/final-map.png** (site list is also printed on the image).
-Companion docs: FINAL_MAP_ASSETS.md (full catalogue + attribution), FINAL_MAP.md (audit & repair), NEW_MAP.md (linkage), CATALOG.md (everything in the project).
+Site numbers refer to the exact map render: **docs/images/harbour-city.png** (site list is also printed on the image).
+Companion docs: HARBOUR_CITY_ASSETS.md (full catalogue + attribution), HARBOUR_CITY.md (audit & repair), HARBOUR_CITY_PLAN.md (linkage), CATALOG.md (everything in the project).
 
 **20 of 80 curated models are placed by the current builder.** The rest are deliberate headroom — see the checklist below and “How to place more”.
 
@@ -11,10 +11,10 @@ Companion docs: FINAL_MAP_ASSETS.md (full catalogue + attribution), FINAL_MAP.md
 
 1. `SKETCHFAB_TOKEN=… python3 tools/download_sketchfab_assets.py` — fetches GLBs into `Assets/CarSales/Sketchfab/<category>/<uid>.glb` (never committed, ~3.5 GB).
 2. `python3 tools/preflight_assets.py` — verifies every download before Unity (size, GLB magic, JSON chunk, triangle/image counts, Draco/meshopt flags, external references, brand strings for the Release Checklist). Report: `docs/ASSET_PREFLIGHT.md`.
-3. Open Unity → **Tools → Car Sales → Final Map → Build Final Map** — places the models listed here; every miss falls back to a yellow stand-in with a PlaceholderSlot.
-4. **Tools → Car Sales → Final Map → Audit Final Map** names any model Unity cannot read; see docs/FINAL_MAP.md.
+3. Open Unity → **Tools → Car Sales → Harbour City → Build Harbour City** — places the models listed here; every miss falls back to a yellow stand-in with a PlaceholderSlot.
+4. **Tools → Car Sales → Harbour City → Audit Harbour City** names any model Unity cannot read; see docs/HARBOUR_CITY.md.
 
-## A. Buildings & POI shells placed by the Final Map
+## A. Buildings & POI shells placed by the Harbour City
 
 | Map site | Model (manifest key) | Licence | Footage |
 |---|---|---|---|
@@ -67,7 +67,7 @@ These are display cars only — no CarVisual, no stock, no trade-in. The fleet c
 | `building_carwash_02` | Elephant carWash | world | BY | — *not placed.* Car Wash (Site 9) is built from primitives by design. Swap with Asset Studio → Town if you prefer this model. |
 | `building_construction_02` | Building under construction | world | BY | Sites 24 & 25 · construction Stage 2 'Draft' shell (Y) |
 | `building_house_01` | Modern luxury villa house building home | hero | BY | Site 3 · Hillside Villa (H, zone 1) |
-| `building_house_06` | Classic Suburban House with Separate Garage | world | BY | — *not placed.* Spare for the residential zone (Sites 2/3); the master map keeps primitives there. |
+| `building_house_06` | Classic Suburban House with Separate Garage | world | BY | — *not placed.* Spare for the residential zone (Sites 2/3); Harbour City keeps primitives there. |
 | `building_house_07` | modern house | world | BY | — *not placed.* Spare for the residential zone. |
 | `building_house_08` | Modern House with full interior | world | BY | — *not placed.* Spare for the residential zone (has an interior — useful if homes become walkable). |
 | `building_office_03` | Headquarters building, office building | world | BY | Site 22 · Northgate Offices (O, zone 15) |
@@ -76,47 +76,47 @@ These are display cars only — no CarVisual, no stock, no trade-in. The fleet c
 | `building_showroom_01` | Two Wheeler Showroom | world | BY | — *not placed.* Two Wheeler Showroom — manifest flags needs review; not auto-placed. |
 | `building_showroom_02` | Car showroom | world | BY | Site 21 · RentGo sales office (R, zone 15) |
 | `car_hatchback_02` | Hatchback car model | showcase | BY | Site 21 · RentGo display bay (bay 1) |
-| `car_hatchback_03` | Car winter | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_hatchback_06` | Car_ Design_riyadh City | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_hatchback_07` | Low Poly City-Pack | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_hatchback_08` | City | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_hatchback_03` | Car winter | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_hatchback_06` | Car_ Design_riyadh City | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_hatchback_07` | Low Poly City-Pack | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_hatchback_08` | City | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
 | `car_luxury_01` | Maserati-ghibli-hybrid | showcase | BY | Site 21 · RentGo display bay (bay 5) |
-| `car_luxury_02` | 1992 Jaguar XJ220 | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_luxury_03` | Rolls-Royce Silver Shadow 1965 1980 | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_luxury_04` | 1997 Mercedes C-class W202 | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_luxury_05` | Realistic Classic Sedan – Unity & Unreal | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_luxury_06` | Mercedes Benz EQE AMG | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_luxury_07` | Aston martin valkyrie amr pro 2022 | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_luxury_08` | Porsche Panamera 4S | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_luxury_02` | 1992 Jaguar XJ220 | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_luxury_03` | Rolls-Royce Silver Shadow 1965 1980 | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_luxury_04` | 1997 Mercedes C-class W202 | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_luxury_05` | Realistic Classic Sedan – Unity & Unreal | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_luxury_06` | Mercedes Benz EQE AMG | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_luxury_07` | Aston martin valkyrie amr pro 2022 | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_luxury_08` | Porsche Panamera 4S | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
 | `car_pickup_01` | Pickup Truck | showcase | BY | Site 21 · RentGo far lot |
-| `car_pickup_02` | American pickup truck | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_pickup_05` | Ford Model A Pickup | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_pickup_07` | Sunny's pickup truck | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_pickup_08` | C10-Monster Truck and Pickup | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_pickup_02` | American pickup truck | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_pickup_05` | Ford Model A Pickup | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_pickup_07` | Sunny's pickup truck | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_pickup_08` | C10-Monster Truck and Pickup | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
 | `car_sedan_01` | BMW M3 Sedan topaz blue car | showcase | BY | Site 21 · RentGo bay 2 + Site 22 · Northgate Offices company car |
-| `car_sedan_02` | Ford Focus Sedan | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_sedan_03` | Generic Sedan Car | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_sedan_04` | Red Sedan Car | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_sedan_05` | Sedan Car | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_sedan_06` | Soviet Car. VAZ-2103 Zhiguli | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_sedan_07` | Oldsmobile Cutlass Supreme Sedan '71 | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_sedan_08` | Generic passenger car pack | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_sedan_02` | Ford Focus Sedan | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_sedan_03` | Generic Sedan Car | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_sedan_04` | Red Sedan Car | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_sedan_05` | Sedan Car | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_sedan_06` | Soviet Car. VAZ-2103 Zhiguli | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_sedan_07` | Oldsmobile Cutlass Supreme Sedan '71 | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_sedan_08` | Generic passenger car pack | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
 | `car_sports_01` | Furtivo Supercar (Black Diamond) | showcase | BY | Site 21 · RentGo display bay (bay 4) |
-| `car_sports_02` | BMW X6M (F16) | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_sports_03` | Supercar | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_sports_04` | Chevrolet Corvette (C7) | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_sports_05` | Gerry Anderson's Supercar | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_sports_06` | Mercedes Benz GT Coupe AMG | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_sports_07` | lamborghini\|car\|supercar\|hypercar\|italia\|cycles | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_sports_08` | BG Thrill - 3D Ferrari Supercar | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_sports_02` | BMW X6M (F16) | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_sports_03` | Supercar | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_sports_04` | Chevrolet Corvette (C7) | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_sports_05` | Gerry Anderson's Supercar | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_sports_06` | Mercedes Benz GT Coupe AMG | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_sports_07` | lamborghini\|car\|supercar\|hypercar\|italia\|cycles | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_sports_08` | BG Thrill - 3D Ferrari Supercar | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
 | `car_suv_01` | Suv Car | showcase | BY | Site 21 · RentGo bay 3 + Site 23 · Offices West company car |
-| `car_suv_02` | Mid Size Off Road SUV | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_suv_03` | Kia SUV | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_suv_04` | Generic SUV Snow covered wrecked | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_suv_05` | Chevy Colorado Z71 4x4 2015 | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_suv_06` | 4x4 toyota Bj | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_suv_07` | 4x4 | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
-| `car_suv_08` | 3D SUV Car | showcase | BY | — *not placed.* Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_suv_02` | Mid Size Off Road SUV | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_suv_03` | Kia SUV | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_suv_04` | Generic SUV Snow covered wrecked | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_suv_05` | Chevy Colorado Z71 4x4 2015 | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_suv_06` | 4x4 toyota Bj | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_suv_07` | 4x4 | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
+| `car_suv_08` | 3D SUV Car | showcase | BY | — *not placed.* Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring. |
 | `construction_machine_01` | Excavator | world | BY | Sites 24 & 25 · Stage 1 'Site' machines |
 | `construction_machine_02` | Telescopic Forklift T30104 | world | BY | Sites 24 & 25 · Stage 1 'Site' machines |
 | `construction_machine_03` | Truck | world | BY | Sites 24 & 25 · Stage 1 'Site' machines |
@@ -145,10 +145,10 @@ These are display cars only — no CarVisual, no stock, no trade-in. The fleet c
 
 ## F. How placement works, and how to change it
 
-- The builder (`Assets/CarSales/Editor/CarSalesFinalMap.cs`) resolves each placement with `FindAsset` — it matches on **key**, then **name**, then **category** (first manifest entry by key order). Missing/undownloadable models fall back to a labelled yellow stand-in (`PlaceholderSlot`), so a partial download never blocks the build.
+- The builder (`Assets/CarSales/Editor/CarSalesHarbourMap.cs`) resolves each placement with `FindAsset` — it matches on **key**, then **name**, then **category** (first manifest entry by key order). Missing/undownloadable models fall back to a labelled yellow stand-in (`PlaceholderSlot`), so a partial download never blocks the build.
 - `TryPlaceGlb` scales each model to a footprint (keeps aspect ratio), stands it on the ground and adds `MeshCollider`s + static flags. Buildings keep their authored front; cars/machines may turn 90° to fit.
-- Per-model tweaks without code: `Assets/CarSales/FinalMap/final-map-overrides.json` — `{ "uid": "…", "yawOffset": 90, "footprintScale": 1.1, "skip": true }`.
-- To place more: extend `BuildFinalMapExtras` (or the specific `Build*`) in `CarSalesFinalMap.cs` with `PlaceGlbOrStandIn(g, "<key>", localCentre, footprint, yaw, allowFlip, kind, m, "what")`. Keep the stand-in fallback — it is what makes partial downloads safe.
+- Per-model tweaks without code: `Assets/CarSales/HarbourCity/harbour-city-overrides.json` — `{ "uid": "…", "yawOffset": 90, "footprintScale": 1.1, "skip": true }`.
+- To place more: extend `BuildHarbourCityExtras` (or the specific `Build*`) in `CarSalesHarbourMap.cs` with `PlaceGlbOrStandIn(g, "<key>", localCentre, footprint, yaw, allowFlip, kind, m, "what")`. Keep the stand-in fallback — it is what makes partial downloads safe.
 - After any change: `python3 tools/asset_map_docs.py` to refresh this sheet, and `python3 tools/render_plan_map.py` if sites or roads moved.
 
 ## G. Honest size note

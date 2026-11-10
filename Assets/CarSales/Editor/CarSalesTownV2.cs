@@ -6,7 +6,7 @@ using UnityEngine.Rendering;
 namespace CarSales.EditorTools
 {
     /// <summary>
-    /// Phase 12: builds the master-map town (CarForSaleSimV2) from TownPlan - the test-drive loop, avenues and
+    /// Builds the Harbour City town from HarbourPlan - the test-drive loop, avenues and
     /// roundabouts, pavements and street lamps, every site in its zone, the dressing of each zone (park and lake,
     /// town-centre terraces, industrial estate, car parks, signs) and the countryside round the loop.
     /// </summary>
@@ -31,6 +31,15 @@ namespace CarSales.EditorTools
             ground.GetComponent<Renderer>().sharedMaterial = m.ground;
             ground.isStatic = true;
 
+            // The sea (Harbour City faces south): a flat steel-blue plane lapping the southern arc of the ring.
+            var sea = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            sea.name = "Sea";
+            sea.transform.SetParent(env, false);
+            sea.transform.position = new Vector3(0f, 0.005f, -350f);
+            sea.transform.localScale = new Vector3(220f, 1f, 22f);   // 2,200 x 220 m, z -460..-240
+            sea.GetComponent<Renderer>().sharedMaterial = m.water;
+            sea.isStatic = true;
+
             // Farm fields and hedgerows outside the loop (seeded so Build Everything always makes the same countryside).
             var g = Group(env, "Countryside");
             var rng = new System.Random(12);
@@ -40,6 +49,7 @@ namespace CarSales.EditorTools
                 {
                     var c = new V2(x + 65f, z + 52f);
                     if (InsideLoop(c, 40f)) continue;
+                    if (c.z < -252f) continue;   // the sea lies south of the ring
                     var field = Deco(g, "Field", PrimitiveType.Cube, new Vector3(c.x, 0.004f, c.z), new Vector3(118f, 0.008f, 94f), crops[rng.Next(crops.Length)]);
                     field.GetComponent<Renderer>().shadowCastingMode = ShadowCastingMode.Off;
                     Deco(g, "Hedge", PrimitiveType.Cube, new Vector3(c.x, 0.8f, c.z - 49f), new Vector3(120f, 1.6f, 1.4f), m.leaves);
@@ -200,38 +210,28 @@ namespace CarSales.EditorTools
                 AddMapPlace(g.gameObject, "Public Park", "G", new Color(0.3f, 0.75f, 0.35f), new Vector3(c.x, 0.1f, z.Z0 - 3f));
             }
 
-            // 10 Town centre: terraced shops facing Dealer Road and the High Street, between the investment buildings.
+            // 10 Town centre: a short terrace of shops in the gap between the Office Tower and the Parking Garage, facing Harbour Boulevard.
             {
                 var g = Group(root, "Zone10_TownCentre");
-                string[] shops = { "CAFE", "BAKERY", "BANK", "PHARMACY", "BARBER", "THE RED LION", "ESTATE AGENT", "NEWSAGENT", "FLORIST", "BUTCHER", "OPTICIAN", "POST OFFICE" };
-                int n = 0;
+                string[] shops = { "CAFE", "BAKERY", "BANK", "PHARMACY" };
                 var rng = new System.Random(10);
-                // North row faces Dealer Road (z = -45): fronts at about z -52.
-                for (float x = -462f; x < -140f; x += 14f)
+                Solid(g, "Forecourt", new Vector3(-40f, 0.012f, -40f), new Vector3(52f, 0.024f, 12f), m.asphalt);
+                int n = 0;
+                for (float x = -62f; x <= -18f; x += 13f)
                 {
-                    if (Town.Sites.Any(s => InBox(s.WorldBox(), new V2(x, -60f), 9f)) || Mathf.Abs(x + 300f) < 12f || Mathf.Abs(x + 125f) < 14f) continue;
-                    float h = 7.5f + (float)rng.NextDouble() * 4f;
-                    Building(g, new Vector3(x, 0f, -59f), new Vector3(13f, h, 12f), m.buildings[n % m.buildings.Length], m, false);
-                    Deco(g, "Shopfront", PrimitiveType.Cube, new Vector3(x, 1.5f, -52.9f), new Vector3(11f, 2.6f, 0.06f), m.windowGlass);
-                    SignText(g, new Vector3(x, 3.4f, -52.85f), shops[n % shops.Length], 4f, Color.white, new Vector2(10f, 0.7f), 180f);
+                    float h = 7f + (float)rng.NextDouble() * 3.5f;
+                    Building(g, new Vector3(x, 0f, -52f), new Vector3(12f, h, 10f), m.buildings[n % m.buildings.Length], m, false);
+                    Deco(g, "Shopfront", PrimitiveType.Cube, new Vector3(x, 1.5f, -46.94f), new Vector3(10f, 2.6f, 0.06f), m.windowGlass);
+                    SignText(g, new Vector3(x, 3.4f, -46.9f), shops[n % shops.Length], 4f, Color.white, new Vector2(9f, 0.7f), 180f);
                     n++;
                 }
-                // South row faces the High Street.
-                for (float x = -460f; x < -315f; x += 14f)
-                {
-                    float h = 7f + (float)rng.NextDouble() * 3f;
-                    Building(g, new Vector3(x, 0f, -88f), new Vector3(13f, h, 12f), m.buildings[(n + 1) % m.buildings.Length], m, true);
-                    Deco(g, "Shopfront", PrimitiveType.Cube, new Vector3(x, 1.5f, -94.1f), new Vector3(11f, 2.6f, 0.06f), m.windowGlass);
-                    SignText(g, new Vector3(x, 3.4f, -94.15f), shops[n % shops.Length], 4f, Color.white, new Vector2(10f, 0.7f));
-                    n++;
-                }
-                AddMapPlace(g.gameObject, "Town Centre", "T", UIFactory.Info, new Vector3(-330f, 0.1f, -78f));
+                AddMapPlace(g.gameObject, "Town Centre", "T", UIFactory.Info, new Vector3(-40f, 0.1f, -52f));
             }
 
             // 11 Industrial estate: warehouses, a fenced vehicle store and parked vans.
             {
                 var g = Group(root, "Zone11_Industrial");
-                foreach (var (x, z, w, d, h) in new[] { (265f, 116f, 38f, 22f, 9f), (330f, 116f, 40f, 22f, 10f), (395f, 116f, 36f, 22f, 8f), (280f, 178f, 60f, 30f, 11f), (372f, 178f, 52f, 30f, 10f) })
+                foreach (var (x, z, w, d, h) in new[] { (262f, 124f, 38f, 22f, 9f), (330f, 124f, 40f, 22f, 10f), (398f, 124f, 36f, 22f, 8f), (280f, 180f, 60f, 30f, 11f), (372f, 180f, 52f, 30f, 10f) })
                 {
                     Building(g, new Vector3(x, 0f, z), new Vector3(w, h, d), m.cladding, m, true);
                     Deco(g, "RollerDoor", PrimitiveType.Cube, new Vector3(x, 2.5f, z - d / 2f - 0.07f), new Vector3(6f, 5f, 0.06f), m.metal);
@@ -242,46 +242,36 @@ namespace CarSales.EditorTools
                     float x = 245f + i * 30f;
                     Solid(g, "Van", new Vector3(x, 1.2f, 147f), new Vector3(2.2f, 2.4f, 5.6f), i % 2 == 0 ? m.flagWhite : m.flagBlue);
                 }
-                RoadSign(g, new Vector3(230f, 0f, 95f), 180f, "INDUSTRIAL ESTATE", m.accentPanel, Color.white, 4.4f);
-                AddMapPlace(g.gameObject, "Industrial Estate", "I", UIFactory.Neutral, new Vector3(320f, 0.1f, 96f));
+                RoadSign(g, new Vector3(238f, 0f, 100f), 0f, "INDUSTRIAL ESTATE", m.accentPanel, Color.white, 4.4f);
+                AddMapPlace(g.gameObject, "Industrial Estate", "I", UIFactory.Neutral, new Vector3(322f, 0.1f, 140f));
             }
 
-            // 3 Auction: customer car park and the outdoor vehicle storage behind the hall.
+            // 3 Auction (Dockside): customer car park west of the market, outdoor vehicle storage further west, fence along the yard.
             {
                 var g = Group(root, "Zone3_AuctionLots");
-                Solid(g, "AuctionParking", new Vector3(-275f, 0.012f, 112f), new Vector3(46f, 0.024f, 32f), m.asphalt);
-                for (int i = 0; i < 9; i++) Deco(g, "Bay", PrimitiveType.Cube, new Vector3(-295f + i * 5f, 0.026f, 112f), new Vector3(0.12f, 0.01f, 26f), m.line);
-                Solid(g, "VehicleStorage", new Vector3(-275f, 0.012f, 165f), new Vector3(240f, 0.024f, 50f), m.asphalt);
-                for (float x = -390f; x < -160f; x += 5f) Deco(g, "Bay", PrimitiveType.Cube, new Vector3(x, 0.026f, 165f), new Vector3(0.12f, 0.01f, 44f), m.line);
-                for (float x = -395f; x <= -155f; x += 3f) Deco(g, "Fence", PrimitiveType.Cube, new Vector3(x, 0.9f, 190.5f), new Vector3(0.08f, 1.8f, 0.08f), m.metal);
-                RoadSign(g, new Vector3(-250f, 0f, 94f), 180f, "AUCTION PARKING", m.flagBlue, Color.white);
+                Solid(g, "AuctionParking", new Vector3(-385f, 0.012f, -112f), new Vector3(46f, 0.024f, 24f), m.asphalt);
+                for (int i = 0; i < 9; i++) Deco(g, "Bay", PrimitiveType.Cube, new Vector3(-405f + i * 5f, 0.026f, -112f), new Vector3(0.12f, 0.01f, 19f), m.line);
+                Solid(g, "VehicleStorage", new Vector3(-375f, 0.012f, -60f), new Vector3(70f, 0.024f, 20f), m.asphalt);
+                for (float x = -405f; x <= -345f; x += 5f) Deco(g, "Bay", PrimitiveType.Cube, new Vector3(x, 0.026f, -60f), new Vector3(0.12f, 0.01f, 17f), m.line);
+                for (float x = -408f; x <= -342f; x += 3f) Deco(g, "Fence", PrimitiveType.Cube, new Vector3(x, 0.9f, -49.5f), new Vector3(0.08f, 1.8f, 0.08f), m.metal);
+                RoadSign(g, new Vector3(-289f, 0f, -85f), 180f, "AUCTION PARKING", m.flagBlue, Color.white);
             }
 
-            // 2 Dealership: customer car park next to AUTO WORLD.
+            // 2 Dealership: customer car park between AUTO WORLD and Harbour Boulevard.
             {
                 var g = Group(root, "Zone2_CustomerParking");
-                Solid(g, "Parking", new Vector3(62f, 0.012f, -10f), new Vector3(70f, 0.024f, 50f), m.asphalt);
-                for (int i = 0; i < 15; i++) Deco(g, "Bay", PrimitiveType.Cube, new Vector3(29f + i * 4.6f, 0.026f, -10f), new Vector3(0.12f, 0.01f, 44f), m.line);
-                RoadSign(g, new Vector3(30f, 0f, -38f), 180f, "AUTO WORLD CUSTOMER PARKING", m.accentPanel, Color.white, 5f);
+                Solid(g, "Parking", new Vector3(20f, 0.012f, -13.5f), new Vector3(40f, 0.024f, 10f), m.asphalt);
+                for (int i = 0; i < 8; i++) Deco(g, "Bay", PrimitiveType.Cube, new Vector3(2f + i * 4.6f, 0.026f, -13.5f), new Vector3(0.12f, 0.01f, 8.5f), m.line);
+                RoadSign(g, new Vector3(44f, 0f, -14.5f), 90f, "AUTO WORLD CUSTOMER PARKING", m.accentPanel, Color.white, 5f);
             }
 
             // 4/5 Inspection and body repair signage; 5 body shop building.
             {
                 var g = Group(root, "Zone45_Services");
-                RoadSign(g, new Vector3(-30f, 0f, 93f), 180f, "MOT · INSPECTION", m.flagBlue, Color.white);
+                RoadSign(g, new Vector3(-44f, 0f, 68f), 0f, "MOT · INSPECTION", m.flagBlue, Color.white);
                 Building(g, new Vector3(170f, 0f, 118f), new Vector3(42f, 8f, 24f), m.buildings[2], m, true);
                 SignText(g, new Vector3(170f, 6.5f, 105.9f), "BODY REPAIR & PAINT", 6f, Color.white, new Vector2(30f, 1.2f));
                 Deco(g, "SprayDoor", PrimitiveType.Cube, new Vector3(160f, 2.5f, 105.93f), new Vector3(6f, 5f, 0.06f), m.metal);
-            }
-
-            // 8 Tyre shop next to Parts Direct (the Final Map builds its own Tyre Shop site instead - see CarSalesFinalMap.cs).
-            if (!finalMap)
-            {
-                var g = Group(root, "Zone8_Tyres");
-                Building(g, new Vector3(190f, 0f, -68f), new Vector3(30f, 7f, 18f), m.buildings[0], m, false);
-                SignText(g, new Vector3(190f, 5.4f, -58.9f), "TYRES · EXHAUSTS · BATTERIES", 5f, Color.white, new Vector2(26f, 1f), 180f);
-                for (int i = 0; i < 6; i++)
-                    Deco(g, "TyreStack", PrimitiveType.Cylinder, new Vector3(178f + i * 4f, 0.5f, -57.5f), new Vector3(0.75f, 0.5f, 0.75f), m.tire);
             }
 
             // 12 Test-drive loop signs.

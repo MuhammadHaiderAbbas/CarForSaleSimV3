@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Car For Sale Simulator - "Final Map" asset curator.
+Car For Sale Simulator - "Harbour City" asset curator.
 
 Queries Sketchfab's PUBLIC Data API v3 (search works without a token; downloading
 the model files requires the user's own API token and is done inside Unity by
-Assets/CarSales/Editor/FinalMap/FinalMapAssetImporter.cs).
+Assets/CarSales/Editor/HarbourCity/HarbourCityAssetImporter.cs).
 
 What this produces:
-  Assets/CarSales/FinalMap/final-map-assets.json   machine-readable manifest
-  docs/FINAL_MAP_ASSETS.md                         human-readable credit list
+  Assets/CarSales/HarbourCity/harbour-city-assets.json   machine-readable manifest
+  docs/HARBOUR_CITY_ASSETS.md                         human-readable credit list
 
 Every entry is verified to be:
   - downloadable (isDownloadable == true)
@@ -75,7 +75,7 @@ HERO_UIDS = {
 }
 
 def fetch(url, timeout=14):
-    req = urllib.request.Request(url, headers={"User-Agent": "CarForSaleSim-FinalMapCurator/1.0"})
+    req = urllib.request.Request(url, headers={"User-Agent": "CarForSaleSim-HarbourCityCurator/1.0"})
     with urllib.request.urlopen(req, timeout=timeout) as r:
         return json.loads(r.read().decode("utf-8"))
 
@@ -172,10 +172,10 @@ def main():
                 "source": "Sketchfab Data API v3 (search results - downloads need the user's token)",
                 "heroUids": HERO_UIDS,
                 "assets": []}
-    md = ["# Final Map — Sketchfab asset list", "",
+    md = ["# Harbour City — Sketchfab asset list", "",
           "Every model below was found and verified through the public Sketchfab Data API v3",
           "(downloadable, licence checked, face count recorded). Files are downloaded inside Unity:",
-          "**Tools → Car Sales → Final Map → Download All Assets** (needs your Sketchfab API token,",
+          "**Tools → Car Sales → Harbour City → Download All Assets** (needs your Sketchfab API token,",
           "sketchfab.com → Settings → Password & API). Nothing is committed to this repository —",
           "the JSON manifest + importer fetch them straight from Sketchfab, as requested.", ""]
     total = 0
@@ -241,12 +241,12 @@ def main():
     md.append("CC BY models are attributed automatically in the in-game credits screen (CREDITS.txt).")
     md.append("CC BY-SA models (flagged ⚠️) need a release-licence review before shipping a commercial build.")
 
-    with open("Assets/CarSales/FinalMap/final-map-assets.json", "w") as f:
+    with open("Assets/CarSales/HarbourCity/harbour-city-assets.json", "w") as f:
         json.dump(manifest, f, indent=2, ensure_ascii=False)
-    with open("docs/FINAL_MAP_ASSETS.md", "w") as f:
+    with open("docs/HARBOUR_CITY_ASSETS.md", "w") as f:
         f.write("\n".join(md) + "\n")
     total_glb = sum(a.get("glbBytes") or 0 for a in manifest["assets"])
-    print(f"\nWrote {total} assets to Assets/CarSales/FinalMap/final-map-assets.json and docs/FINAL_MAP_ASSETS.md")
+    print(f"\nWrote {total} assets to Assets/CarSales/HarbourCity/harbour-city-assets.json and docs/HARBOUR_CITY_ASSETS.md")
     print(f"GLB download size (approx): {total_glb/1e6:.0f} MB")
 
 if __name__ == "__main__":

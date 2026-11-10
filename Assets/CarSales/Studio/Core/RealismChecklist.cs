@@ -57,10 +57,10 @@ namespace CarSales.Studio
                 },
                 new RealismItem
                 {
-                    Id = "sky", Title = "Real sky (HDRI)", Weight = 3, Tool = "studio",
-                    Progress = i.Skies > 0 ? 1f : 0f,
-                    Why = "A photographed sky lights the whole town and is reflected in every car's paint.",
-                    Next = "Asset Studio > Online > Poly Haven > Skies: download a 4K sky (e.g. a partly cloudy one), then Build Everything.",
+                    Id = "sky", Title = "Simple built-in sky", Weight = 1, Tool = "graphics",
+                    Progress = 1f,
+                    Why = "Harbour City ships with a simple procedural sky - blue atmosphere and a sun disc. No HDRI package required; it lights the town and is reflected in car paint.",
+                    Next = "Nothing to do - the built-in procedural sky is applied by Build Everything / Build Harbour City.",
                 },
                 new RealismItem
                 {

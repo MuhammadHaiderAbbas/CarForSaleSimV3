@@ -8,7 +8,7 @@ using UnityEngine;
 namespace CarSales
 {
     /// <summary>
-    /// The rental &amp; hire business (phase 14, "Final Map"): any of your forecourt cars can go out on hire —
+    /// The rental &amp; hire business: any of your forecourt cars can go out on hire —
     /// a daily rate, a refundable deposit, damage and miles applied on return, late fees kept from the deposit.
     /// The dealer computer has a Rentals app; the world has a competitor (RentGo, next to Luxury Lane) running the same game.
     /// </summary>

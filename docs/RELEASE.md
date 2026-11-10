@@ -5,18 +5,25 @@ exactly what that means — no sugar-coating.
 
 ## What is already done
 
-- All 13 phases + Phase 14 (Final Map) build tooling; Release Checklist + Realism Checklist windows;
+- All phases build tooling; Release Checklist + Realism Checklist windows;
   `Tools > Car Sales > Build > Windows (Release)` refuses to build while blockers exist;
   `THIRD_PARTY_NOTICES.txt` ships with the build (CC BY attribution for the Sketchfab models).
-- Real car **models** appear when imported via Asset Studio (vecarz/Sketchfab) — placed in world by the
-  Used Car Market / auction / private viewings / your own dealership lot.
+- **Harbour City** (the one town) builds into the `HarbourCity.unity` scene; per-site model uploads are
+  reproducible via `Tools > Car Sales > Harbour City > Map Slots…`.
+- **Cars are a system now**: the built-in database (8 fictional cars) ships drivable; every car GLB you
+  approve in Asset Studio lands in `Assets/CarSales/Data/Cars` and every `CarDatabase`; and
+  `Tools > Car Sales > Release Checklist > Wire All Cars Into The Game` batch-imports every downloaded
+  car GLB from the Harbour City manifest (measure → wheel detection → paint detection → clear-coat →
+  prefab → `CarDefinition` → database). They are buyable and drivable; names are trademark-cleaned.
 - The world renders with walkers (PedestrianSystem), traffic, weather, day cycle, phone, saves.
 
 ## What YOU must do on your machine (no one else can do it for you)
 
 1. **Build with Unity 6 on your PC** (this repo deliberately contains no Library/, no .exe).
-   `Tools > Car Sales > 2. Build Everything` → `Final Map → Build Final Map` → run EditMode tests
+   `Tools > Car Sales > 2. Build Everything` → run EditMode tests
    (`python3 tools/run_unity_tests.py`) until green.
+   Then (optional) `Tools > Car Sales > Release Checklist > Wire All Cars Into The Game` to turn every
+   downloaded car GLB into a buyable, drivable car.
 2. **Fix the Release Checklist to all-green**: Real maker cars renamed (the *Rename* button in the
    checklist renames text entries; **you must also strip badges/logos from the car textures** — trademark
    clearance is a legal task, not a text edit), the two imported cars' textures actually badge-free,
@@ -45,18 +52,20 @@ exactly what that means — no sugar-coating.
 - No Unity in the sandbox → no .exe, no import of your new GLBs, no overriding your local project state.
 - No Steam account → no store page, no fee payment, no build upload, no legal advice.
 - No GLB redistribution → `Assets/CarSales/Sketchfab/` is downloaded by you, never committed.
-- GLBs already known to crash the import worker (see `docs/FINAL_MAP.md`) must be reimported or skipped by you.
+- GLBs already known to crash the import worker (see `docs/HARBOUR_CITY.md`) must be reimported or skipped by you.
 
 ## The ordered checklist I maintain for this project
 
 ```
 1. Unity 6 open, project fully idle (bottom-right spinner stopped)
-2. Tools > Car Sales > 2. Build Everything
+2. Tools > Car Sales > 2. Build Everything        (builds Harbour City)
 3. python3 tools/run_unity_tests.py          (EditMode green)
-4. Final Map > Audit Final Map                (0 FAILED; reimport crashers one by one)
-5. Final Map > Repair Missing Materials       (if any)  Ctrl+S
-6. Release Checklist all green (Rename button → strip badges by hand)
-7. PlayMode: full day cycle + auction + RentGo + construction sites
-8. Build > Windows (Release)
-9. Itch.io demo first → collect feedback → Next Fest → Steam week
+4. Harbour City > Audit Harbour City                (0 FAILED; reimport crashers one by one)
+5. Harbour City > Repair Missing Materials       (if any)  Ctrl+S
+6. Harbour City > Map Slots…                      (place your own models per site)
+7. Release Checklist > Wire All Cars Into The Game (every downloaded car buyable + drivable)
+8. Release Checklist all green (Rename button → strip badges by hand)
+9. PlayMode: full day cycle + auction + RentGo + construction sites
+10. Build > Windows (Release)
+11. Itch.io demo first → collect feedback → Next Fest → Steam week
 ```

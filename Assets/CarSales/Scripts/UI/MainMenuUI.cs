@@ -10,7 +10,7 @@ namespace CarSales
     /// <summary>Main menu scene. Builds its own UI (put it on any GameObject; a Canvas is added if missing).</summary>
     public class MainMenuUI : MonoBehaviour
     {
-        [SerializeField] string gameScene = "DealershipTest";
+        [SerializeField] string gameScene = "HarbourCity";
         GameObject mainPanel;
         SettingsUI settings;
         Button continueButton, loadButton;

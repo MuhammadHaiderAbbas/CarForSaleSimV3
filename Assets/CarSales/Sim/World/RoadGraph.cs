@@ -100,8 +100,8 @@ namespace CarSales.Sim
             }
         }
 
-        /// <summary>The town's network: phase 12 master map (TownPlan), with roundabouts.</summary>
-        public static List<RoadSegment> DefaultTown() => TownPlan.Segments();
+        /// <summary>The town's network: Harbour City, with roundabouts.</summary>
+        public static List<RoadSegment> DefaultTown() => HarbourPlan.Segments();
 
         /// <summary>The default v4 town: two long roads (z = -27 and 95) and two cross roads (x = ±70).</summary>
         public static List<RoadSegment> LegacyTown()

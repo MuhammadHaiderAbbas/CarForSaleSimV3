@@ -8,38 +8,38 @@ using UnityEngine;
 
 namespace CarSales.Tests
 {
-    /// <summary>Phase 14: the Final Map plan - zones, sites, roads, traffic and the construction plots.</summary>
+    /// <summary>Phase 14: the Harbour City plan - zones, sites, roads, traffic and the construction plots.</summary>
     public class Phase14Tests
     {
         [Test]
-        public void Zones_MasterMapPlusBusinessPark()
+        public void Zones_HarbourCityPlusBusinessPark()
         {
-            var numbers = FinalMapPlan.Zones.Select(z => z.Number).Distinct().OrderBy(n => n).ToList();
-            CollectionAssert.AreEqual(Enumerable.Range(1, 15), numbers, "the master map's 14 zones plus zone 15 (Southside Business Park)");
-            Assert.AreEqual(2, FinalMapPlan.Zones.Count(z => z.Number == 14), "two expansion plots, as on the master map");
-            Assert.AreEqual(1, FinalMapPlan.Zones.Count(z => z.Number == 15));
-            foreach (var z in FinalMapPlan.Zones) { Assert.Less(z.X0, z.X1, z.Name); Assert.Less(z.Z0, z.Z1, z.Name); }
-            StringAssert.Contains("Business Park", FinalMapPlan.Zone(15).Name);
+            var numbers = HarbourPlan.Zones.Select(z => z.Number).Distinct().OrderBy(n => n).ToList();
+            CollectionAssert.AreEqual(Enumerable.Range(1, 15), numbers, "Harbour City's 14 zones plus zone 15 (Southside Business Park)");
+            Assert.AreEqual(2, HarbourPlan.Zones.Count(z => z.Number == 14), "two expansion plots, as in Harbour City");
+            Assert.AreEqual(1, HarbourPlan.Zones.Count(z => z.Number == 15));
+            foreach (var z in HarbourPlan.Zones) { Assert.Less(z.X0, z.X1, z.Name); Assert.Less(z.Z0, z.Z1, z.Name); }
+            StringAssert.Contains("Business Park", HarbourPlan.Zone(15).Name);
         }
 
         [Test]
         public void EverySite_IsInItsZone_OffTheRoads_AndReachable()
         {
-            foreach (var s in FinalMapPlan.Sites)
+            foreach (var s in HarbourPlan.Sites)
             {
-                var zone = FinalMapPlan.ZoneAt(s.Zone, s.Position);
+                var zone = HarbourPlan.ZoneAt(s.Zone, s.Position);
                 Assert.IsTrue(zone.Contains(s.Position, 40f), $"{s.Name} ({s.Position.x}, {s.Position.z}) is in zone {s.Zone} {zone.Name}");
                 var box = s.WorldBox();
-                Assert.IsFalse(FinalMapPlan.BoxTouchesRoad(box), $"{s.Name} footprint {box} sits on a road");
+                Assert.IsFalse(HarbourPlan.BoxTouchesRoad(box), $"{s.Name} footprint {box} sits on a road");
                 var front = s.ToWorld((s.FX0 + s.FX1) / 2f, s.FZ0 - 2f);
-                Assert.Less(FinalMapPlan.RoadClearance(front), 14f, $"{s.Name}: entrance {front.x:0},{front.z:0} is far from any road");
+                Assert.Less(HarbourPlan.RoadClearance(front), 14f, $"{s.Name}: entrance {front.x:0},{front.z:0} is far from any road");
             }
         }
 
         [Test]
         public void Sites_DontOverlapEachOther()
         {
-            var sites = FinalMapPlan.Sites;
+            var sites = HarbourPlan.Sites;
             for (int i = 0; i < sites.Length; i++)
                 for (int j = i + 1; j < sites.Length; j++)
                 {
@@ -56,47 +56,47 @@ namespace CarSales.Tests
                                        "CarWashCenter", "UsedCarMarket", "AuctionCenter", "MapleClose", "Home_Trailer", "Home_House", "Home_Villa",
                                        "RentalApartments", "OfficeTower", "ParkingGarage",
                                        "PatrolStation", "TyreShop", "RentGo", "NorthgateOffices", "OfficesWest", "NorthgateSite", "DocksideSite" })
-                Assert.IsNotNull(FinalMapPlan.Site(id), id);
-            Assert.AreEqual(FinalMapPlan.Sites.Length, FinalMapPlan.Sites.Select(s => s.Id).Distinct().Count(), "site ids are unique");
+                Assert.IsNotNull(HarbourPlan.Site(id), id);
+            Assert.AreEqual(HarbourPlan.Sites.Length, HarbourPlan.Sites.Select(s => s.Id).Distinct().Count(), "site ids are unique");
         }
 
         [Test]
         public void NewRoads_ExistAndServeTheBusinessPark()
         {
-            Assert.IsTrue(FinalMapPlan.Roads.Any(r => r.Name == "Horizon Drive"), "Horizon Drive is missing");
-            Assert.IsTrue(FinalMapPlan.Roads.Any(r => r.Name == "Business Park Road"), "Business Park Road is missing");
+            Assert.IsTrue(HarbourPlan.Roads.Any(r => r.Name == "Horizon Drive"), "Horizon Drive is missing");
+            Assert.IsTrue(HarbourPlan.Roads.Any(r => r.Name == "Business Park Road"), "Business Park Road is missing");
             // Business Park Road runs past all three of the south-side sites it serves.
-            var bpr = FinalMapPlan.Roads.First(r => r.Name == "Business Park Road");
+            var bpr = HarbourPlan.Roads.First(r => r.Name == "Business Park Road");
             foreach (var id in new[] { "NorthgateOffices", "OfficesWest", "RentGo" })
             {
-                var s = FinalMapPlan.Site(id);
+                var s = HarbourPlan.Site(id);
                 var front = s.ToWorld((s.FX0 + s.FX1) / 2f, s.FZ0 - 2f);
-                float d = bpr.Points.Select((p, i) => i == bpr.Points.Length - 1 ? float.MaxValue : FinalMapPlan.SegmentDistance(front, p, bpr.Points[i + 1])).Min();
+                float d = bpr.Points.Select((p, i) => i == bpr.Points.Length - 1 ? float.MaxValue : HarbourPlan.SegmentDistance(front, p, bpr.Points[i + 1])).Min();
                 Assert.Less(d, 12f, $"{s.Name} is not on Business Park Road");
             }
             // Horizon Drive reaches the southern ring road.
-            var hd = FinalMapPlan.Roads.First(r => r.Name == "Horizon Drive");
+            var hd = HarbourPlan.Roads.First(r => r.Name == "Horizon Drive");
             var south = hd.Points.Last();
             float best = float.MaxValue;
-            for (int i = 0; i < FinalMapPlan.Ring.Length - 1; i++) best = Math.Min(best, FinalMapPlan.SegmentDistance(south, FinalMapPlan.Ring[i], FinalMapPlan.Ring[i + 1]));
+            for (int i = 0; i < HarbourPlan.Ring.Length - 1; i++) best = Math.Min(best, HarbourPlan.SegmentDistance(south, HarbourPlan.Ring[i], HarbourPlan.Ring[i + 1]));
             Assert.Less(best, 6f, "Horizon Drive does not meet the ring road");
         }
 
         [Test]
         public void Traffic_IsConnected_WithLightsAtTheSameJunctions()
         {
-            var segs = FinalMapPlan.Segments();
+            var segs = HarbourPlan.Segments();
             Assert.Greater(segs.Count, 40);
-            var lanes = RoadGraph.Build(segs, 9f, 6f, FinalMapPlan.LightNodes);
+            var lanes = RoadGraph.Build(segs, 9f, 6f, HarbourPlan.LightNodes);
             Assert.IsTrue(lanes.Any(l => l.endsAtJunction));
             foreach (var l in lanes.Where(x => x.endsAtJunction)) Assert.IsNotEmpty(l.next, $"lane {l.id} at a junction leads somewhere");
-            foreach (var p in FinalMapPlan.LightNodes) Assert.IsTrue(lanes.Any(l => V2.Distance(l.start, p) < 12f || V2.Distance(l.end, p) < 12f), $"light at {p.x:0},{p.z:0}");
+            foreach (var p in HarbourPlan.LightNodes) Assert.IsTrue(lanes.Any(l => V2.Distance(l.start, p) < 12f || V2.Distance(l.end, p) < 12f), $"light at {p.x:0},{p.z:0}");
         }
 
         [Test]
         public void Pavements_DontCrossOtherRoads()
         {
-            var pav = FinalMapPlan.Pavements();
+            var pav = HarbourPlan.Pavements();
             Assert.IsNotEmpty(pav);
             foreach (var (a, b) in pav)
             {
@@ -105,7 +105,7 @@ namespace CarSales.Tests
                 for (float t = 0f; t <= 1f; t += 1f / Mathf.Max(1f, len / 6f))
                 {
                     var p = a + (b - a) * t;
-                    Assert.GreaterOrEqual(FinalMapPlan.RoadClearance(p), -0.2f, $"pavement point {p.x:0},{p.z:0} is on a road");
+                    Assert.GreaterOrEqual(HarbourPlan.RoadClearance(p), -0.2f, $"pavement point {p.x:0},{p.z:0} is on a road");
                 }
             }
         }
@@ -123,16 +123,16 @@ namespace CarSales.Tests
             Assert.AreEqual(1, ConstructionStages.DaysUntilNextStage(1, 2, 2));
             StringAssert.Contains("Finished", ConstructionStages.StageName(ConstructionStages.Final));
             // The plan really does mark the two plots as the construction sites.
-            Assert.AreEqual("Northgate Site (under construction)", FinalMapPlan.Site("NorthgateSite").Name);
-            Assert.AreEqual("Dockside Site (under construction)", FinalMapPlan.Site("DocksideSite").Name);
+            Assert.AreEqual("Northgate Site (under construction)", HarbourPlan.Site("NorthgateSite").Name);
+            Assert.AreEqual("Dockside Site (under construction)", HarbourPlan.Site("DocksideSite").Name);
         }
 
         [Test]
         public void MapFrame_FitsTheRingAndTheNewRoads()
         {
-            var (cx, cz, half) = FinalMapPlan.MapFrame;
+            var (cx, cz, half) = HarbourPlan.MapFrame;
             Assert.GreaterOrEqual(half, 500f);
-            foreach (var p in FinalMapPlan.Roads.SelectMany(r => r.Points))
+            foreach (var p in HarbourPlan.Roads.SelectMany(r => r.Points))
             {
                 Assert.LessOrEqual(Mathf.Abs(p.x - cx), half, $"road point {p.x} escapes the map frame");
                 Assert.LessOrEqual(Mathf.Abs(p.z - cz), half, $"road point {p.z} escapes the map frame");
@@ -140,12 +140,12 @@ namespace CarSales.Tests
         }
     }
 
-    /// <summary>The Final Map asset manifest: downloads are repeatable, licences are valid, no duplicates.</summary>
+    /// <summary>The Harbour City asset manifest: downloads are repeatable, licences are valid, no duplicates.</summary>
     public class Phase14AssetManifestTests
     {
         static string ManifestPath()
         {
-            string p = Path.Combine(Application.dataPath, "CarSales", "FinalMap", "final-map-assets.json");
+            string p = Path.Combine(Application.dataPath, "CarSales", "HarbourCity", "harbour-city-assets.json");
             return File.Exists(p) ? p : null;
         }
 
@@ -172,7 +172,7 @@ namespace CarSales.Tests
         public void Manifest_ExistsAndIsWellFormed()
         {
             var assets = LoadAssets();
-            if (assets == null) Assert.Ignore("final-map-assets.json not found (unexpected in this repo)");
+            if (assets == null) Assert.Ignore("harbour-city-assets.json not found (unexpected in this repo)");
             Assert.Greater(assets.Count, 50, "expected a real working set of models");
             foreach (var a in assets)
             {
@@ -188,7 +188,7 @@ namespace CarSales.Tests
         public void Manifest_LicencesAreKnownAndFreeForCommercialUse()
         {
             var assets = LoadAssets();
-            if (assets == null) Assert.Ignore("final-map-assets.json not found");
+            if (assets == null) Assert.Ignore("harbour-city-assets.json not found");
             var allowed = new HashSet<string> { "cc0", "by", "by-sa" };
             foreach (var a in assets)
                 Assert.IsTrue(allowed.Contains((string)a["licence"]), $"{a["name"]}: licence '{a["licence"]}' is not an allowed commercial-use licence");
@@ -198,7 +198,7 @@ namespace CarSales.Tests
         public void Manifest_HasNoDuplicates_AndNoOversizedFiles()
         {
             var assets = LoadAssets();
-            if (assets == null) Assert.Ignore("final-map-assets.json not found");
+            if (assets == null) Assert.Ignore("harbour-city-assets.json not found");
             var uids = assets.Select(a => (string)a["uid"]).ToList();
             Assert.AreEqual(uids.Count, uids.Distinct().Count(), "duplicate Sketchfab uids");
             var paths = assets.Select(a => (string)a["importPath"]).ToList();
@@ -216,7 +216,7 @@ namespace CarSales.Tests
         public void Manifest_EveryCarCategoryIsStocked()
         {
             var assets = LoadAssets();
-            if (assets == null) Assert.Ignore("final-map-assets.json not found");
+            if (assets == null) Assert.Ignore("harbour-city-assets.json not found");
             foreach (var cat in new[] { "car_hatchback", "car_sedan", "car_suv", "car_sports", "car_pickup", "car_luxury" })
                 Assert.IsTrue(assets.Any(a => (string)a["category"] == cat), $"no models curated for {cat}");
         }

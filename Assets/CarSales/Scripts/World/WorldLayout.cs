@@ -38,7 +38,7 @@ namespace CarSales
         public List<SiteRecord> sites = new List<SiteRecord>();
         public List<CarSales.Sim.RoadSegment> roads = new List<CarSales.Sim.RoadSegment>();
         public List<UserRoad> userRoads = new List<UserRoad>();
-        [Tooltip("Phase 12: the town plan version these sites and roads were placed on (2 = the master-map town).")]
+        [Tooltip("The town version the sites and roads were placed on (4 = Harbour City).")]
         public int townVersion;
 
         /// <summary>The town's road network: the default roads plus yours (split where they meet).</summary>

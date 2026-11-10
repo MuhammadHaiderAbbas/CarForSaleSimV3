@@ -10,86 +10,87 @@ using UnityEngine;
 namespace CarSales.EditorTools
 {
     /// <summary>
-    /// Phase 14 "Final Map": builds the finished game town (the master-map town plus the Phase 14 POIs)
+    /// Harbour City - the one and only town of Car For Sale Simulator (port town on the south coast).
     ///
-    ///   Tools &gt; Car Sales &gt; Final Map &gt; Build Final Map
+    ///   Tools &gt; Car Sales &gt; Harbour City &gt; Build Harbour City
     ///
-    /// The Final Map reuses everything '2. Build Everything' made (materials, car database, prefabs) and only
-    /// (re)creates the scene. New POIs (patrol station, tyre shop, RentGo rent-a-car lot, the south-side business
-    /// park and two plots under construction) are dressed with the Sketchfab models listed in
-    /// Assets/CarSales/FinalMap/final-map-assets.json. Download them first:
+    /// Recreates the game scene (Assets/CarSales/Generated/Scenes/HarbourCity.unity) from the Harbour City plan
+    /// and reuses everything '2. Build Everything' made (materials, car database, prefabs). The Harbour City POIs
+    /// (patrol station, tyre shop, RentGo rent-a-car lot, the south-side business park and the two plots under
+    /// construction) are dressed with the Sketchfab models listed in Assets/CarSales/HarbourCity/harbour-city-assets.json.
+    /// Download them first:
     ///
     ///   SKETCHFAB_TOKEN=&lt;your token&gt; python3 tools/download_sketchfab_assets.py
     ///
     /// Everything is optional: a model that is missing falls back to a primitive stand-in (a yellow box with a
     /// PlaceholderSlot, so Asset Studio &gt; Town can swap it later) and the scene still builds. The car GLBs are
     /// placed as static display cars - they are NOT for sale and never enter the stock system.
+    /// Per-site upload slots are applied last (see MapSlotsWindow).
     /// </summary>
     public static partial class CarSalesSetupWizard
     {
-        public const string FinalScenePath = Gen + "/Scenes/FinalMap.unity";
-        const string ManifestPath = Root + "/FinalMap/final-map-assets.json";
+        const string ManifestPath = Root + "/HarbourCity/harbour-city-assets.json";
 
         static readonly List<string> buildReport = new List<string>();
 
         // ------------------------------------------------------------------ MENU
-        [MenuItem("Tools/Car Sales/Final Map/Build Final Map", priority = 11)]
-        static void BuildFinalMapMenu()
+        [MenuItem("Tools/Car Sales/Harbour City/Build Harbour City", priority = 11)]
+        static void BuildHarbourCityMenu()
         {
             if (!File.Exists(GameScenePath))
             {
                 EditorUtility.DisplayDialog("Car Sales",
-                    "Run '2. Build Everything' first - the Final Map reuses its materials, car database and prefabs.", "OK");
+                    "Run '2. Build Everything' first - Harbour City reuses its materials, car database and prefabs.", "OK");
                 return;
             }
-            var missing = FinalMapManifest().Where(a => !AssetDatabase.LoadAssetAtPath<GameObject>(a.importPath)).ToList();
+            var missing = HarbourCityManifest().Where(a => !AssetDatabase.LoadAssetAtPath<GameObject>(a.importPath)).ToList();
             string assetNote = missing.Count == 0
-                ? $"All {FinalMapManifest().Count} Sketchfab models were found.\n\n"
-                : $"{missing.Count} of {FinalMapManifest().Count} Sketchfab models are not downloaded yet - those spots will use primitive stand-ins.\n" +
+                ? $"All {HarbourCityManifest().Count} Sketchfab models were found.\n\n"
+                : $"{missing.Count} of {HarbourCityManifest().Count} Sketchfab models are not downloaded yet - those spots will use primitive stand-ins.\n" +
                   "Fetch them later with:\n    SKETCHFAB_TOKEN=<token> python3 tools/download_sketchfab_assets.py\n\n";
-            if (!EditorUtility.DisplayDialog("Build Final Map",
-                    assetNote + "Rebuild the Final Map scene now?\n\n" + FinalScenePath,
+            if (!EditorUtility.DisplayDialog("Build Harbour City",
+                    assetNote + "Rebuild the Harbour City scene now?\n\n" + ScenePath,
                     "Build", "Cancel")) return;
             try
             {
                 buildReport.Clear();
-                BuildFinalMap();
+                BuildHarbourCity();
                 string summary = string.Join("\n", buildReport);
-                Debug.Log("[CarSales] Final Map build report:\n" + summary);
+                Debug.Log("[CarSales] Harbour City build report:\n" + summary);
                 EditorUtility.DisplayDialog("Car Sales Simulator",
-                    "Final Map built:\n" + FinalScenePath + "\n\n" +
-                    summary + "\n\nThe main menu now loads the Final Map. Open the scene and press PLAY to try it.",
+                    "Harbour City built:\n" + ScenePath + "\n\n" +
+                    summary + "\n\nThe main menu loads Harbour City. Open the scene and press PLAY to try it.",
                     "Let's go");
             }
             catch (OperationCanceledException) { /* user chose not to save the open scene */ }
             catch (System.Exception e)
             {
                 Debug.LogException(e);
-                EditorUtility.DisplayDialog("Build Final Map", "Build failed:\n" + e.Message + "\n\nSee the Console for details.", "OK");
+                EditorUtility.DisplayDialog("Build Harbour City", "Build failed:\n" + e.Message + "\n\nSee the Console for details.", "OK");
             }
             finally { EditorUtility.ClearProgressBar(); }
         }
 
-        [MenuItem("Tools/Car Sales/Final Map/Download Assets (instructions)", priority = 12)]
+        [MenuItem("Tools/Car Sales/Harbour City/Download Assets (instructions)", priority = 12)]
         static void DownloadInstructionsMenu()
         {
             const string cmd = "SKETCHFAB_TOKEN=<your token> python3 tools/download_sketchfab_assets.py";
             EditorGUIUtility.systemCopyBuffer = cmd;
-            EditorUtility.DisplayDialog("Download the Final Map models",
-                "The Final Map's real 3D models are not in the repository (several GB). Download them once with:\n\n" +
+            EditorUtility.DisplayDialog("Download the Harbour City models",
+                "Harbour City's real 3D models are not in the repository (several GB). Download them once with:\n\n" +
                 cmd + "\n\n(Sketchfab API token: sketchfab.com → Settings → Password & API. The command has been copied to the clipboard.)\n\n" +
                 "Files land in Assets/CarSales/Sketchfab/<category>/<uid>.glb (~3.5 GB, skipped if over 95 MB).\n" +
-                "Then run 'Tools > Car Sales > Final Map > Build Final Map' again to place them.\n\n" +
-                "Everything in the manifest is CC0 or CC-BY; see docs/FINAL_MAP_ASSETS.md and THIRD_PARTY_NOTICES.txt.",
+                "Then run 'Tools > Car Sales > Harbour City > Build Harbour City' again to place them.\n\n" +
+                "Everything in the manifest is CC0 or CC-BY; see docs/HARBOUR_CITY_ASSETS.md and THIRD_PARTY_NOTICES.txt.",
                 "OK");
         }
 
-        /// <summary>Rewrites the MainMenu scene's MainMenuUI.gameScene (the wizard bakes "DealershipTest"; a Final Map build flips it).</summary>
+        /// <summary>Rewrites the MainMenu scene's MainMenuUI.gameScene (the wizard bakes "HarbourCity"; kept for safety if the menu scene was built before the rename).</summary>
         static void PointMainMenuAt(string sceneName)
         {
             if (!File.Exists(MenuScenePath))
             {
-                Debug.LogWarning("[CarSales] Final Map: MainMenu.unity not found - the main menu still points at DealershipTest. Run '2. Build Everything' once.");
+                Debug.LogWarning("[CarSales] Harbour City: MainMenu.unity not found - the main menu may still point at an old scene. Run '2. Build Everything' once.");
                 return;
             }
             var menu = EditorSceneManager.OpenScene(MenuScenePath, OpenSceneMode.Additive);
@@ -103,10 +104,10 @@ namespace CarSales.EditorTools
             EditorSceneManager.MarkSceneDirty(menu);
             EditorSceneManager.SaveScene(menu);
             EditorSceneManager.CloseScene(menu, true);
-            Debug.Log($"[CarSales] Final Map: main menu now loads '{sceneName}' ({flipped} MainMenuUI component(s)).");
+            Debug.Log($"[CarSales] Harbour City: main menu now loads '{sceneName}' ({flipped} MainMenuUI component(s)).");
         }
 
-        static void BuildFinalMap()
+        internal static void BuildHarbourCity()
         {
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) throw new OperationCanceledException();
             Progress("Loading materials", 0.05f);
@@ -122,33 +123,33 @@ namespace CarSales.EditorTools
             if (actions == null) throw new InvalidOperationException("Input actions are missing - run 'Tools > Car Sales > 2. Build Everything' first.");
 
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-            Progress("Building the Final Map", 0.1f);
-            BuildSceneCore(mats, db, carDisplay, customer, actions, CarSales.Sim.FinalMapPlan.Version, FinalScenePath, finalMap: true);
+            Progress("Building Harbour City", 0.1f);
+            BuildSceneCore(mats, db, carDisplay, customer, actions, CarSales.Sim.HarbourPlan.Version, ScenePath, finalMap: true);
             Progress("Main menu", 0.95f);
-            PointMainMenuAt(Path.GetFileNameWithoutExtension(FinalScenePath));   // the menu scene is re-created by 'Build Everything' and always points at DealershipTest
+            PointMainMenuAt(Path.GetFileNameWithoutExtension(ScenePath));
 
             Progress("Saving", 0.97f);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            EditorSceneManager.OpenScene(FinalScenePath);
+            EditorSceneManager.OpenScene(ScenePath);
         }
 
         // ------------------------------------------------------------------ MANIFEST
-        sealed class FinalMapAsset
+        sealed class HarbourCityAsset
         {
             public string key, category, uid, name, author, licence, importPath;
             public bool needsReview;
         }
 
-        static List<FinalMapAsset> manifestCache;
+        static List<HarbourCityAsset> manifestCache;
 
-        static List<FinalMapAsset> FinalMapManifest()
+        static List<HarbourCityAsset> HarbourCityManifest()
         {
             if (manifestCache != null) return manifestCache;
-            manifestCache = new List<FinalMapAsset>();
+            manifestCache = new List<HarbourCityAsset>();
             if (!File.Exists(ManifestPath))
             {
-                Debug.LogWarning("[CarSales] Final Map manifest not found at " + ManifestPath + " - the Final Map will use primitive stand-ins only.");
+                Debug.LogWarning("[CarSales] Harbour City manifest not found at " + ManifestPath + " - Harbour City will use primitive stand-ins only.");
                 return manifestCache;
             }
             try
@@ -156,7 +157,7 @@ namespace CarSales.EditorTools
                 var root = CarSales.Foundation.MiniJson.Parse(File.ReadAllText(ManifestPath));
                 foreach (var item in root["assets"].Items)
                 {
-                    var a = new FinalMapAsset
+                    var a = new HarbourCityAsset
                     {
                         key = item["key"]?.AsString("") ?? "",
                         category = item["category"]?.AsString("") ?? "",
@@ -188,9 +189,9 @@ namespace CarSales.EditorTools
             }
         }
 
-        static FinalMapAsset FindAsset(string keyOrCategory, bool firstMatch)
+        static HarbourCityAsset FindAsset(string keyOrCategory, bool firstMatch)
         {
-            var all = FinalMapManifest();
+            var all = HarbourCityManifest();
             if (firstMatch) return all.FirstOrDefault(a => a.category == keyOrCategory);
             return all.FirstOrDefault(a => a.key == keyOrCategory)
                 ?? all.FirstOrDefault(a => a.name == keyOrCategory)
@@ -198,8 +199,8 @@ namespace CarSales.EditorTools
         }
 
         /// <summary>Picks up to <paramref name="count"/> assets from a category, deterministically (key order).</summary>
-        static List<FinalMapAsset> PickFromCategory(string category, int count)
-            => FinalMapManifest().Where(a => a.category == category).OrderBy(a => a.key).Take(count).ToList();
+        static List<HarbourCityAsset> PickFromCategory(string category, int count)
+            => HarbourCityManifest().Where(a => a.category == category).OrderBy(a => a.key).Take(count).ToList();
 
         // ------------------------------------------------------------------ GLB PLACEMENT
         static bool IsGlbReady(string importPath) => !string.IsNullOrEmpty(importPath) && AssetDatabase.LoadAssetAtPath<GameObject>(importPath);
@@ -209,27 +210,27 @@ namespace CarSales.EditorTools
         /// Buildings (allowSidewaysFlip: false) keep their front; cars and machines may turn 90° to fit.
         /// Returns false when the prefab is missing or has no renderers (caller decides on the fallback).
         /// </summary>
-        static bool TryPlaceGlb(Transform parent, FinalMapAsset asset, Vector3 localCentre, Vector3 footprint, float yawDeg, bool allowSidewaysFlip, string what)
+        static bool TryPlaceGlb(Transform parent, HarbourCityAsset asset, Vector3 localCentre, Vector3 footprint, float yawDeg, bool allowSidewaysFlip, string what)
         {
             var ov = FindOverride(asset);
             if (ov != null && ov.skip)
             {
-                buildReport.Add($"· {what}: skipped by override (Assets/CarSales/FinalMap/final-map-overrides.json); using a stand-in");
-                Debug.LogWarning($"[CarSales] Final Map: '{what}' is skipped by final-map-overrides.json.");
+                buildReport.Add($"· {what}: skipped by override (Assets/CarSales/HarbourCity/harbour-city-overrides.json); using a stand-in");
+                Debug.LogWarning($"[CarSales] Harbour City: '{what}' is skipped by harbour-city-overrides.json.");
                 return false;
             }
             if (ov != null) { yawDeg += ov.yawOffset; footprint *= ov.footprintScale; }
             var prefab = string.IsNullOrEmpty(asset?.importPath) ? null : AssetDatabase.LoadAssetAtPath<GameObject>(asset.importPath);
             if (asset == null)
             {
-                buildReport.Add($"· {what}: not in the manifest (docs/FINAL_MAP_ASSETS.md); using a stand-in");
-                Debug.LogWarning($"[CarSales] Final Map: no manifest entry for '{what}'. The build used a stand-in.");
+                buildReport.Add($"· {what}: not in the manifest (docs/HARBOUR_CITY_ASSETS.md); using a stand-in");
+                Debug.LogWarning($"[CarSales] Harbour City: no manifest entry for '{what}'. The build used a stand-in.");
                 return false;
             }
             if (!prefab)
             {
                 buildReport.Add($"· {what}: {asset.name} - NOT DOWNLOADED (run tools/download_sketchfab_assets.py); using a stand-in");
-                Debug.LogWarning($"[CarSales] Final Map: '{asset.name}' not found at {asset.importPath}. Run tools/download_sketchfab_assets.py with SKETCHFAB_TOKEN, then rebuild.");
+                Debug.LogWarning($"[CarSales] Harbour City: '{asset.name}' not found at {asset.importPath}. Run tools/download_sketchfab_assets.py with SKETCHFAB_TOKEN, then rebuild.");
                 return false;
             }
             var go = (GameObject)PrefabUtility.InstantiatePrefab(prefab, parent);
@@ -238,7 +239,7 @@ namespace CarSales.EditorTools
             go.transform.localScale = Vector3.one;
 
             var rs = go.GetComponentsInChildren<Renderer>(true).Where(r => !(r is ParticleSystemRenderer)).ToArray();
-            if (rs.Length == 0) { Debug.LogWarning($"[CarSales] Final Map: '{asset.name}' has no renderers - skipped."); UnityEngine.Object.DestroyImmediate(go); return false; }
+            if (rs.Length == 0) { Debug.LogWarning($"[CarSales] Harbour City: '{asset.name}' has no renderers - skipped."); UnityEngine.Object.DestroyImmediate(go); return false; }
             Bounds b = rs[0].bounds; for (int i = 1; i < rs.Length; i++) b.Encapsulate(rs[i].bounds);
 
             float k = Mathf.Min(footprint.x / Mathf.Max(0.01f, b.size.x), footprint.z / Mathf.Max(0.01f, b.size.z));
@@ -280,9 +281,9 @@ namespace CarSales.EditorTools
         // ------------------------------------------------------------------ THE POIs
         static void BuildPatrolStation(Transform env, Mats m)
         {
-            var s = FinalMapPlan.Site("PatrolStation");
+            var s = HarbourPlan.Site("PatrolStation");
             var g = Site(env, s.Name, W(s.Position), s.Yaw);
-            // Apron and parking in front (facing Dealer Road, north).
+            // Apron and parking in front (facing north).
             Solid(g, "Apron", new Vector3(0f, 0.008f, -2f), new Vector3(24f, 0.016f, 10f), m.asphalt);
             foreach (float x in new[] { -6f, 0f, 6f }) Deco(g, "Bay", PrimitiveType.Cube, new Vector3(x, 0.02f, -2f), new Vector3(0.12f, 0.01f, 8f), m.line);
             bool glb = PlaceGlbOrStandIn(g, "building_patrol", new Vector3(0f, 0f, 7.5f), new Vector3(19f, 9f, 15f), 0f, false, PlaceholderKind.Building, m, "Patrol station");
@@ -306,7 +307,7 @@ namespace CarSales.EditorTools
 
         static void BuildTyreShop(Transform env, Mats m)
         {
-            var s = FinalMapPlan.Site("TyreShop");
+            var s = HarbourPlan.Site("TyreShop");
             var g = Site(env, s.Name, W(s.Position), s.Yaw);
             Solid(g, "Workshop", new Vector3(0f, 2.1f, 6f), new Vector3(17f, 4.2f, 11f), m.buildings[0]);
             Solid(g, "WorkshopRoof", new Vector3(0f, 4.3f, 6f), new Vector3(17.5f, 0.25f, 11.5f), m.roof);
@@ -324,7 +325,7 @@ namespace CarSales.EditorTools
 
         static void BuildRentGo(Transform env, Mats m)
         {
-            var s = FinalMapPlan.Site("RentGo");
+            var s = HarbourPlan.Site("RentGo");
             var g = Site(env, s.Name, W(s.Position), s.Yaw);
             // Lot: asphalt with bay lines, a sales office at the back (a GLB showroom fits the part).
             Solid(g, "Lot", new Vector3(0f, 0.006f, 0f), new Vector3(30f, 0.012f, 19f), m.asphalt);
@@ -341,7 +342,7 @@ namespace CarSales.EditorTools
             SignText(g, new Vector3(0f, office ? 6.4f : 4.6f, 2.1f), "RENTGO", 5f, Color.white, new Vector2(13f, 1.2f), 0f);
             SignText(g, new Vector3(0f, office ? 5.35f : 3.6f, 2.1f), "RENTALS & SALES", 2.6f, new Color(1f, 0.85f, 0.3f), new Vector2(12f, 0.7f), 0f);
             // Display cars out front - static, for show only (not in stock, not for sale, no CarVisual).
-            var carAssets = new List<FinalMapAsset>();
+            var carAssets = new List<HarbourCityAsset>();
             foreach (var cat in new[] { "car_hatchback", "car_sedan", "car_suv", "car_sports" })
                 carAssets.AddRange(PickFromCategory(cat, 1));
             carAssets.AddRange(PickFromCategory("car_luxury", 1));
@@ -370,7 +371,7 @@ namespace CarSales.EditorTools
             foreach (var (id, sign, key, height, footprint) in specs)
             {
                 fleetIndex++;
-                var s = FinalMapPlan.Site(id);
+                var s = HarbourPlan.Site(id);
                 var g = Site(env, s.Name, W(s.Position), s.Yaw);
                 bool glb = PlaceGlbOrStandIn(g, key, new Vector3(0f, 0f, footprint.z / 2f + 2f), footprint, 0f, false, PlaceholderKind.Building, m, sign);
                 if (!glb)
@@ -394,7 +395,7 @@ namespace CarSales.EditorTools
 
         static void BuildConstructionPlot(Transform env, Mats m, string siteId, string displayName, string finalKey, int startDay, int daysPerStage)
         {
-            var s = FinalMapPlan.Site(siteId);
+            var s = HarbourPlan.Site(siteId);
             var root = Site(env, s.Name, W(s.Position), s.Yaw);
             var stages = new Transform[ConstructionStages.StageCount];
             for (int i = 0; i < stages.Length; i++)
@@ -497,14 +498,13 @@ namespace CarSales.EditorTools
                 TryPlaceGlb(g, asset, new Vector3(zone.Centre.x - 25f, 0f, zone.Centre.z + 12f), new Vector3(2.4f, 3.4f, 2.4f), 20f * (StableHash(asset.key) % 18), true, "park statue");
             // Road signs for the two new roads.
             var j0 = Group(env, "BusinessParkSigns");
-            RoadSign(j0, new Vector3(112f, 0f, -133f), 0f, "SOUTHSIDE BUSINESS PARK", m.flagBlue, Color.white, 5.2f);
-            RoadSign(j0, new Vector3(140f, 0f, -147f), 270f, "HORIZON DRIVE · RING ROAD", m.flagWhite, new Color(0.1f, 0.1f, 0.12f), 4.6f);
+            RoadSign(j0, new Vector3(225f, 0f, -131f), 270f, "SOUTHSIDE BUSINESS PARK", m.flagBlue, Color.white, 5.2f);
+            RoadSign(j0, new Vector3(190f, 0f, -118f), 180f, "HORIZON DRIVE · RING ROAD", m.flagWhite, new Color(0.1f, 0.1f, 0.12f), 4.6f);
         }
 
         /// <summary>
         /// The curated 7,742-face hero villa (CC BY, by zigurat architecture studio) becomes the Hillside Villa's exterior shell.
-        /// Final map only; the master map keeps the primitive villa untouched. Door, pool and plants stay as they are.
-        /// When the model is not downloaded the primitive shell is kept and the build says so in the report.
+        /// Door, pool and plants stay as they are. When the model is not downloaded the primitive shell is kept and the build says so in the report.
         /// </summary>
         static void BuildHeroVilla(Transform env)
         {
@@ -514,7 +514,7 @@ namespace CarSales.EditorTools
             if (level1 == null)
             {
                 buildReport.Add("· Hero villa: Home_Villa/Level1 not found in the scene - the primitive villa was kept.");
-                Debug.LogWarning("[CarSales] Final Map: Home_Villa/Level1 not found; the hero villa was not placed.");
+                Debug.LogWarning("[CarSales] Harbour City: Home_Villa/Level1 not found; the hero villa was not placed.");
                 return;
             }
             if (!TryPlaceGlb(level1, asset, new Vector3(0f, 0f, 8f), new Vector3(17f, 7f, 11f), 0f, false, "hero villa"))
@@ -530,7 +530,7 @@ namespace CarSales.EditorTools
             buildReport.Add("· Hero villa: primitive shell replaced with the curated GLB (CC BY, zigurat architecture studio).");
         }
 
-        static void BuildFinalMapExtras(Transform env, Mats m)
+        static void BuildHarbourCityExtras(Transform env, Mats m)
         {
             Progress("Hero villa", 0.54f);
             BuildHeroVilla(env);
@@ -548,7 +548,9 @@ namespace CarSales.EditorTools
             BuildConstructionPlot(env, m, "DocksideSite", "Dockside Works", "General Ship Repair", startDay: 2, daysPerStage: 3);
             Progress("Park statues and signs", 0.72f);
             BuildParkStatuesAndSigns(env, m);
-            buildReport.Add("· Final Map POIs placed. Missing models are listed above - fetch and rebuild to swap them in.");
+            Progress("Your uploaded site models", 0.73f);
+            ApplyHarbourCitySlots(env);   // per-site uploads from Tools > Car Sales > Harbour City > Map Slots…
+            buildReport.Add("· Harbour City POIs placed. Missing models are listed above - fetch and rebuild to swap them in.");
         }
     }
 }

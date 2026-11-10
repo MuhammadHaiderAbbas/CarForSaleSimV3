@@ -1,4 +1,4 @@
-Car For Sale Simulator V2 - third-party notices
+Car For Sale Simulator - third-party notices
 
 1. Material Icons (interface icons)
    Copyright Google LLC. https://github.com/google/material-design-icons
@@ -8,13 +8,13 @@ Car For Sale Simulator V2 - third-party notices
 2. Imported 3D models, characters and animations are listed with their licences in CREDITS.txt
    (generated from the Asset Studio registry).
 
--3. Sketchfab 3D models (Phase 14 "Final Map")
-   The Final Map can place 80 curated models, downloaded at build time from Sketchfab
+3. Sketchfab 3D models (Harbour City)
+   Harbour City can place 80 curated models, downloaded at build time from Sketchfab
    (72 x CC BY 4.0, 8 x CC0). They are NOT redistributed in this repository.
    The complete attribution list (author, licence and licence URL for every model) is
-   docs/FINAL_MAP_ASSETS.md; the machine-readable manifest with sources is
-   Assets/CarSales/FinalMap/final-map-assets.json. Download with
-   tools/download_sketchfab_assets.py (see docs/FINAL_MAP.md).
+   docs/HARBOUR_CITY_ASSETS.md; the machine-readable manifest with sources is
+   Assets/CarSales/HarbourCity/harbour-city-assets.json. Download with
+   tools/download_sketchfab_assets.py (see docs/HARBOUR_CITY.md).
 
 ------------------------------------------------------------------------------
 

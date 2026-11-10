@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Renders docs/images/final-map.png (and master-map.png) straight from the plan files —
-these are exact, not artistic interpretations. Re-run after any plan edit:
+Renders docs/images/harbour-city.png straight from HarbourPlan.cs — this is an exact
+drawing of the plan, not an artistic interpretation. Re-run after any plan edit:
 
     python3 tools/render_plan_map.py
 """
@@ -13,9 +13,9 @@ import matplotlib.patches as mpatches
 from matplotlib.patches import FancyArrowPatch
 import matplotlib.patheffects as pe
 
-PLAN = sys.argv[1] if len(sys.argv) > 1 else "Assets/CarSales/Sim/World/FinalMapPlan.cs"
-OUT  = sys.argv[2] if len(sys.argv) > 2 else ("docs/images/final-map.png" if "FinalMap" in PLAN else "docs/images/master-map.png")
-TITLE = "CAR FOR SALE — FINAL MAP (V3)" if "FinalMap" in PLAN else "CAR FOR SALE — MASTER MAP (V2)"
+PLAN = sys.argv[1] if len(sys.argv) > 1 else "Assets/CarSales/Sim/World/HarbourPlan.cs"
+OUT  = sys.argv[2] if len(sys.argv) > 2 else "docs/images/harbour-city.png"
+TITLE = "CAR FOR SALE — HARBOUR CITY (V4)"
 
 src = open(PLAN, encoding="utf-8").read()
 
@@ -109,7 +109,7 @@ sx = 0.752
 fig.text(sx, 0.928, TITLE, fontsize=13.5, fontweight="bold", color="#1b2a1b")
 fig.text(sx, 0.897, "Exact render of the plan file (tools/render_plan_map.py).", fontsize=7.5, color="#5a6a5a")
 
-fig.text(sx, 0.852, "ROADS  (dark = master roads,  red = Final-Map additions)", fontsize=8.5, fontweight="bold", color="#1b2a1b")
+fig.text(sx, 0.852, "ROADS  (dark = ring & avenues,  red = south-side additions)", fontsize=8.5, fontweight="bold", color="#1b2a1b")
 for i, (name, w, pts) in enumerate(roads):
     ax_patch = "#b03a2e" if name in ("Horizon Drive", "Business Park Road") else "#37474f"
     fig.patches.append(mpatches.Rectangle((sx, 0.822 - i * 0.019), 0.011, 0.0115, transform=fig.transFigure, facecolor=ax_patch, edgecolor="none"))
@@ -126,7 +126,7 @@ fig.text(sx, key_y, "GLYPHS:  D dealer  A auction  U used  S service  W workshop
                      "P parts/tyres  $ investment  H home  G park  T town centre  I industrial  M street\n"
                      "X patrol  R rent-a-car  O office  Y construction", fontsize=6.6, color="#3a4a3a", linespacing=1.3)
 fig.text(sx, 0.012, "Scale: ring road is ~1.9 km across.   North = up.   Red dots = junctions with traffic lights.\n"
-                     "Zone 12 = the ring road (test-drive loop).   Full details: docs/NEW_MAP.md · docs/CATALOG.md",
+                     "Zone 12 = the ring road (test-drive loop).   Full details: docs/HARBOUR_CITY_PLAN.md · docs/CATALOG.md",
          fontsize=6.4, color="#5a6a5a", linespacing=1.35)
 
 plt.savefig(OUT, facecolor="#e9ece0")

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Downloads every verified asset in Assets/CarSales/FinalMap/final-map-assets.json straight from Sketchfab.
+Downloads every verified asset in Assets/CarSales/HarbourCity/harbour-city-assets.json straight from Sketchfab.
 
 Needs YOUR Sketchfab API token (sketchfab.com -> Settings -> Password & API):
 
     SKETCHFAB_TOKEN=xxxxxxxx python3 tools/download_sketchfab_assets.py
 
-Files land in Assets/CarSales/Sketchfab/<category>/<uid>.glb (the layout the Final Map importer expects).
+Files land in Assets/CarSales/Sketchfab/<category>/<uid>.glb (the layout the Harbour City importer expects).
 Assets bigger than SKIP_OVER_MB (default 95) are skipped on purpose - GitHub rejects files that large.
 (The manifest keeps only curated models at or under that cap, so this is a safety net; skipped files simply
 build as primitive stand-ins.)
@@ -21,9 +21,9 @@ import urllib.request
 import urllib.error
 
 API = "https://api.sketchfab.com/v3"
-MANIFEST = "Assets/CarSales/FinalMap/final-map-assets.json"
+MANIFEST = "Assets/CarSales/HarbourCity/harbour-city-assets.json"
 OUT_ROOT = "Assets/CarSales/Sketchfab"
-REPORT = "Assets/CarSales/FinalMap/download-report.json"
+REPORT = "Assets/CarSales/HarbourCity/download-report.json"
 SKIP_OVER_MB = float(os.environ.get("SKIP_OVER_MB", "95"))
 TOKEN = os.environ.get("SKETCHFAB_TOKEN", "").strip()
 
@@ -96,7 +96,7 @@ def main():
 
         # 2. Stream it, honouring the size cap.
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "CarForSaleSim-FinalMapDownloader/1.0"})
+            req = urllib.request.Request(url, headers={"User-Agent": "CarForSaleSim-HarbourCityDownloader/1.0"})
             with urllib.request.urlopen(req, timeout=180) as r:
                 length = int(r.headers.get("Content-Length") or 0)
                 if length and length / 1e6 > SKIP_OVER_MB:

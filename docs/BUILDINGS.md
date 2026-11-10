@@ -1,9 +1,9 @@
-# Buildings used in Car For Sale Simulator (Final Map)
+# Buildings used in Car For Sale Simulator (Harbour City)
 
-Every building, where it lives, and which GLB dressing it uses (Final Map build, Phase 14).
+Every building, where it lives, and which GLB dressing it uses (Harbour City build, Phase 14).
 "Built-in" = procedural primitive model from `Tools > Car Sales > 1. Check & Install Packages / 2. Build Everything`
 (always present, no download needed). "GLB" = Sketchfab model, only if downloaded with
-`SKETCHFAB_TOKEN=<token> python3 tools/download_sketchfab_assets.py` — otherwise the Final Map places its built-in stand-in.
+`SKETCHFAB_TOKEN=<token> python3 tools/download_sketchfab_assets.py` — otherwise the Harbour City places its built-in stand-in.
 
 ## Master plan (both maps share these zones/sites)
 
@@ -20,7 +20,7 @@ Every building, where it lives, and which GLB dressing it uses (Final Map build,
 | 6 | Car Wash Center (`CarWashCenter`, zone 6) | Wash hall (GLB *Elephant carWash*, `carwash`) — stand-in when not downloaded | Built-in + optional GLB |
 | 7 | Fuel Station (`FuelStation`, zone 7) | Forecourt + convenience box | Built-in |
 | 8 | Parts Direct (`PartsDirect`, zone 8) | Parts store | Built-in |
-| 8 | Tyres & Wheels (`TyreShop`, zone 8, Final Map) | Tyre shop workshop | Built-in |
+| 8 | Tyres & Wheels (`TyreShop`, zone 8, Harbour City) | Tyre shop workshop | Built-in |
 | 9 | Private-seller market (`MapleClose`, `BirchClose`, zone 9) | Residential streets | Built-in |
 | 10 | Town Centre (`RentalApartments`, `OfficeTower`, `ParkingGarage`, `PatrolStation`, zone 10) | Apartments, tower, garage, patrol station | Built-in; patrol station → optional GLB *Police station in Kobe, Japan* (`building_patrol`) |
 | 11 | Industrial Estate (zone 11) | Industrial sheds | Built-in |
@@ -44,14 +44,14 @@ Every building, where it lives, and which GLB dressing it uses (Final Map build,
 
 ## What "used" means here
 
-The Final Map builder places GLBs **only if the matching file exists** at
+The Harbour City builder places GLBs **only if the matching file exists** at
 `Assets/CarSales/Sketchfab/<category>/<uid>.glb`; anything missing becomes a primitive stand-in (still playable).
-Type **Tools → Car Sales → Final Map → Audit Final Map** after downloading to see exactly which of the
+Type **Tools → Car Sales → Harbour City → Audit Harbour City** after downloading to see exactly which of the
 entries above are live models vs stand-ins.
 
 ## Which GLBs are NOT used by the builder
 
-From `docs/FINAL_MAP_ASSETS.md`: `two wheeler showroom` (unused), most `car_*` entries used only as RentGo
+From `docs/HARBOUR_CITY_ASSETS.md`: `two wheeler showroom` (unused), most `car_*` entries used only as RentGo
 display cars, four hatchbacks, and three street props — the builder picks the first per key/category.
-You can swap any of them by editing `Assets/CarSales/FinalMap/final-map-overrides.json` (skip) and
-`final-map-assets.json` (different model).
+You can swap any of them by editing `Assets/CarSales/HarbourCity/harbour-city-overrides.json` (skip) and
+`harbour-city-assets.json` (different model).

@@ -11,7 +11,7 @@ namespace CarSales
     /// </summary>
     public class PedestrianSystem : MonoBehaviour
     {
-        // Phase 12: people walk the pavements of the master-map town (TownPlan), turning round at the ends.
+        // People walk the pavements of Harbour City, turning round at the ends.
         class Walker { public Transform t; public int pavement; public float d, dir, speed; public bool turnedIn; }
         List<(V2 a, V2 b)> pavements;
         readonly List<Walker> walkers = new List<Walker>();

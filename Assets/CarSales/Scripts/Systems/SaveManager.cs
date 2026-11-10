@@ -293,7 +293,7 @@ namespace CarSales
             if (CarSalesServices.Progress) CarSalesServices.Progress.SetState(data.stats, data.objectiveIndex, data.daysInDebt, data.hasWon);
             foreach (var c in data.ownedCars) c.inspected = true;
             // Phase 12: the town was rebuilt. Cars left on the old streets would now be inside buildings: park them at the dealership.
-            // (2 -> 3 is non-destructive: the final map keeps every master-map site exactly where it was.)
+            // (Old saves are non-destructive: Harbour City kept every pre-existing site id.)
             int moved = 0;
             if (data.townLayout < 2)
                 foreach (var c in data.ownedCars)

@@ -28,7 +28,7 @@ namespace CarSales.EditorTools
         const string Root = "Assets/CarSales";
         const string Gen = Root + "/Generated";
         const string InputPath = Root + "/Input/CarSalesControls.inputactions";
-        const string ScenePath = Gen + "/Scenes/DealershipTest.unity";
+        const string ScenePath = Gen + "/Scenes/HarbourCity.unity";
         public const string GameScenePath = ScenePath;
         const string MenuScenePath = Gen + "/Scenes/MainMenu.unity";
         const int InteractLayer = 20;
@@ -621,9 +621,9 @@ namespace CarSales.EditorTools
 
         // ------------------------------------------------------------------ GAME SCENE
         static void BuildGameScene(Mats m, CarDatabase db, CarDisplay carDisplayPrefab, CustomerAI customerPrefab, ActionRefs a)
-            => BuildSceneCore(m, db, carDisplayPrefab, customerPrefab, a, CarSales.Sim.TownPlan.Version, ScenePath, finalMap: false);
+            => BuildSceneCore(m, db, carDisplayPrefab, customerPrefab, a, CarSales.Sim.HarbourPlan.Version, ScenePath, finalMap: true);
 
-        /// <summary>Builds a playable game scene. townVersion 2 = the master map, 3 = the Final Map (with the Phase 14 POIs).</summary>
+        /// <summary>Builds the one playable game scene: Harbour City (with the Phase 14 POIs).</summary>
         static void BuildSceneCore(Mats m, CarDatabase db, CarDisplay carDisplayPrefab, CustomerAI customerPrefab, ActionRefs a,
                                    int townVersion, string scenePath, bool finalMap)
         {
@@ -672,10 +672,8 @@ namespace CarSales.EditorTools
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene, scenePath);
 
-            // Build settings: the menu, then this town. The other town steps aside (it stays in the project, just not in the build).
+            // Build settings: the menu, then the Harbour City scene.
             var list = EditorBuildSettings.scenes.Where(s => s.path != scenePath && s.path != MenuScenePath).ToList();
-            string otherScene = finalMap ? ScenePath : FinalScenePath;
-            list = list.Select(s => s.path == otherScene ? new EditorBuildSettingsScene(s.path, false) : s).ToList();
             list.Insert(0, new EditorBuildSettingsScene(MenuScenePath, true));
             list.Insert(1, new EditorBuildSettingsScene(scenePath, true));
             EditorBuildSettings.scenes = list.ToArray();

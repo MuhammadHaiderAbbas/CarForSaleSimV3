@@ -16,7 +16,7 @@ namespace CarSales.Studio.EditorTools
     public static class RenameTrademarkCars
     {
         // Real word -> fictional replacement. Applied whole-word, case-insensitive.
-        static readonly (string real, string fictional)[] Map =
+        internal static readonly (string real, string fictional)[] Map =
         {
             ("mercedes-benz", "Meridian"), ("mercedes", "Meridian"), ("mersedes", "Meridian"),
             ("benz", "Meridian"), ("amg", "Mistral"), ("brabus", "Mistral"), ("maybach", "Meridian"),
@@ -33,7 +33,7 @@ namespace CarSales.Studio.EditorTools
             ("volvo", "Sten"), ("renault", "Velcourt"), ("peugeot", "Velcourt"),
         };
 
-        static string CleanName(string raw)
+        internal static string CleanName(string raw)
         {
             if (string.IsNullOrWhiteSpace(raw)) return raw;
             string s = Regex.Replace(raw, @"(?i)www\.[a-z0-9\-.]+", " ");

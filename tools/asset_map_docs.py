@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 """
 Regenerates docs/ASSET_MAP.md — the sheet that maps every manifest asset to
-the exact map site (number on docs/images/final-map.png), glyph and zone,
+the exact map site (number on docs/images/harbour-city.png), glyph and zone,
 or says plainly that it is not placed and why.
 
     python3 tools/asset_map_docs.py
 
 The placement column is maintained by hand in PLACEMENT below — it mirrors
-Assets/CarSales/Editor/CarSalesFinalMap.cs. If you change the builder,
-change PLACEMENT too (and docs/FINAL_MAP.md / docs/NEW_MAP.md if the sites move).
+Assets/CarSales/Editor/CarSalesHarbourMap.cs. If you change the builder,
+change PLACEMENT too (and docs/HARBOUR_CITY.md / docs/HARBOUR_CITY_PLAN.md if the sites move).
 """
 import json
 import collections
 
-MANIFEST = "Assets/CarSales/FinalMap/final-map-assets.json"
+MANIFEST = "Assets/CarSales/HarbourCity/harbour-city-assets.json"
 DOC = "docs/ASSET_MAP.md"
 
 # key -> (map site # / area, one-line detail). Everything not listed is intentionally unplaced.
@@ -45,7 +45,7 @@ NOT_PLACED_WHY = {
     "building_showroom_01": "Two Wheeler Showroom — manifest flags needs review; not auto-placed.",
     "building_carwash_02": "Car Wash (Site 9) is built from primitives by design. Swap with Asset Studio → Town if you prefer this model.",
     "building_apartment_05": "Spare. Zone 10 'Rental Apartments' is primitive; wire it in if you extend the Dockside/Buildings programme.",
-    "building_house_06": "Spare for the residential zone (Sites 2/3); the master map keeps primitives there.",
+    "building_house_06": "Spare for the residential zone (Sites 2/3); Harbour City keeps primitives there.",
     "building_house_07": "Spare for the residential zone.",
     "building_house_08": "Spare for the residential zone (has an interior — useful if homes become walkable).",
     "construction_machine_05": "Backup machine (deterministic order: only the first 4 non-crane are placed).",
@@ -63,7 +63,7 @@ def blanket_reason(a):
     if a["category"].startswith("furniture_"):
         return "Interiors are primitive by design (furnished via Asset Studio / Phase 13 props if you swap)."
     if a["category"].startswith("car_"):
-        return "Showcase catalogue — the Final Map places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring."
+        return "Showcase catalogue — the Harbour City places only the first key per class (RentGo + company cars). The other cars are imported into the game economy only via your own wiring."
     return "Catalogue / headroom — not auto-placed."
 
 with open(MANIFEST, encoding="utf-8") as _f:
@@ -76,12 +76,12 @@ for a in sorted(assets, key=lambda x: (x["category"], x["key"])):
 placed = [a for a in assets if a["key"] in PLACEMENT]
 lines = []
 A = lines.append
-A("# Final Map — asset placement sheet")
+A("# Harbour City — asset placement sheet")
 A("")
 A("*Generated from `" + MANIFEST + "` + placement table in `tools/asset_map_docs.py` — re-run `python3 tools/asset_map_docs.py` after any manifest or builder change.*")
 A("")
-A("Site numbers refer to the exact map render: **docs/images/final-map.png** (site list is also printed on the image).")
-A("Companion docs: FINAL_MAP_ASSETS.md (full catalogue + attribution), FINAL_MAP.md (audit & repair), NEW_MAP.md (linkage), CATALOG.md (everything in the project).")
+A("Site numbers refer to the exact map render: **docs/images/harbour-city.png** (site list is also printed on the image).")
+A("Companion docs: HARBOUR_CITY_ASSETS.md (full catalogue + attribution), HARBOUR_CITY.md (audit & repair), HARBOUR_CITY_PLAN.md (linkage), CATALOG.md (everything in the project).")
 A("")
 A(f"**{len(placed)} of {len(assets)} curated models are placed by the current builder.** The rest are deliberate headroom — see the checklist below and “How to place more”.")
 A("")
@@ -89,10 +89,10 @@ A("## Read this first")
 A("")
 A("1. `SKETCHFAB_TOKEN=… python3 tools/download_sketchfab_assets.py` — fetches GLBs into `Assets/CarSales/Sketchfab/<category>/<uid>.glb` (never committed, ~3.5 GB).")
 A("2. `python3 tools/preflight_assets.py` — verifies every download before Unity (size, GLB magic, JSON chunk, triangle/image counts, Draco/meshopt flags, external references, brand strings for the Release Checklist). Report: `docs/ASSET_PREFLIGHT.md`.")
-A("3. Open Unity → **Tools → Car Sales → Final Map → Build Final Map** — places the models listed here; every miss falls back to a yellow stand-in with a PlaceholderSlot.")
-A("4. **Tools → Car Sales → Final Map → Audit Final Map** names any model Unity cannot read; see docs/FINAL_MAP.md.")
+A("3. Open Unity → **Tools → Car Sales → Harbour City → Build Harbour City** — places the models listed here; every miss falls back to a yellow stand-in with a PlaceholderSlot.")
+A("4. **Tools → Car Sales → Harbour City → Audit Harbour City** names any model Unity cannot read; see docs/HARBOUR_CITY.md.")
 A("")
-A("## A. Buildings & POI shells placed by the Final Map")
+A("## A. Buildings & POI shells placed by the Harbour City")
 A("")
 A("| Map site | Model (manifest key) | Licence | Footage |")
 A("|---|---|---|---|")
@@ -149,10 +149,10 @@ for cat, group in by_cat.items():
 A("")
 A("## F. How placement works, and how to change it")
 A("")
-A("- The builder (`Assets/CarSales/Editor/CarSalesFinalMap.cs`) resolves each placement with `FindAsset` — it matches on **key**, then **name**, then **category** (first manifest entry by key order). Missing/undownloadable models fall back to a labelled yellow stand-in (`PlaceholderSlot`), so a partial download never blocks the build.")
+A("- The builder (`Assets/CarSales/Editor/CarSalesHarbourMap.cs`) resolves each placement with `FindAsset` — it matches on **key**, then **name**, then **category** (first manifest entry by key order). Missing/undownloadable models fall back to a labelled yellow stand-in (`PlaceholderSlot`), so a partial download never blocks the build.")
 A("- `TryPlaceGlb` scales each model to a footprint (keeps aspect ratio), stands it on the ground and adds `MeshCollider`s + static flags. Buildings keep their authored front; cars/machines may turn 90° to fit.")
-A("- Per-model tweaks without code: `Assets/CarSales/FinalMap/final-map-overrides.json` — `{ \"uid\": \"…\", \"yawOffset\": 90, \"footprintScale\": 1.1, \"skip\": true }`.")
-A("- To place more: extend `BuildFinalMapExtras` (or the specific `Build*`) in `CarSalesFinalMap.cs` with `PlaceGlbOrStandIn(g, \"<key>\", localCentre, footprint, yaw, allowFlip, kind, m, \"what\")`. Keep the stand-in fallback — it is what makes partial downloads safe.")
+A("- Per-model tweaks without code: `Assets/CarSales/HarbourCity/harbour-city-overrides.json` — `{ \"uid\": \"…\", \"yawOffset\": 90, \"footprintScale\": 1.1, \"skip\": true }`.")
+A("- To place more: extend `BuildHarbourCityExtras` (or the specific `Build*`) in `CarSalesHarbourMap.cs` with `PlaceGlbOrStandIn(g, \"<key>\", localCentre, footprint, yaw, allowFlip, kind, m, \"what\")`. Keep the stand-in fallback — it is what makes partial downloads safe.")
 A("- After any change: `python3 tools/asset_map_docs.py` to refresh this sheet, and `python3 tools/render_plan_map.py` if sites or roads moved.")
 A("")
 A("## G. Honest size note")

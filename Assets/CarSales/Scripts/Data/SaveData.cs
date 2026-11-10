@@ -36,7 +36,7 @@ namespace CarSales
         // Phase 12: town plan the save was made on (0 = the old two-road town).
         public int townLayout;
 
-        // Phase 14 (final map): cars out on hire. Older saves have no list - they simply have none.
+        // Cars out on hire (the Rentals app / RentGo competitor). Older saves have no list - they simply have none.
         public List<RentalContract> rentals = new List<RentalContract>();
     }
 }

@@ -20,7 +20,7 @@ namespace CarSales.EditorTools
 
         static void SetUpLooks(Camera cam)
         {
-            ApplyImportedSky();
+            ApplyImportedSky();   // simple procedural sky (no HDRI)
             lastNightVolume = lastRainVolume = null;
             if (cam && cam.farClipPlane < 1200f) cam.farClipPlane = 1200f;   // the haze, not a wall, hides the far end of town
 #if CARSALES_URP
@@ -68,12 +68,11 @@ namespace CarSales.EditorTools
 
         static void ApplyImportedSky()
         {
-            var reg = AssetRegistry.Load();
-            if (!reg) return;
-            var sky = reg.records.Where(r => r != null && r.category == CarSales.Studio.AssetCategory.Sky && r.mainAsset is Material)
-                                 .OrderByDescending(r => r.importedAtUtc).FirstOrDefault();
-            if (sky == null) return;
-            RenderSettings.skybox = (Material)sky.mainAsset;
+            // Harbour City: a simple built-in sky only - no HDRI package dependency.
+            // Unity's built-in Default-Skybox.mat is the procedural sky (blue atmosphere + sun disc);
+            // assigning it explicitly also clears any HDRI material a previous build baked into the scene.
+            var sky = AssetDatabase.GetBuiltinExtraResource<Material>("Default-Skybox.mat");
+            if (sky) RenderSettings.skybox = sky;
             DynamicGI.UpdateEnvironment();
         }
 

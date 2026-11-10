@@ -25,15 +25,13 @@ namespace CarSales.EditorTools
             if (l || !create) return l;
             if (!AssetDatabase.IsValidFolder("Assets/CarSales/Data")) AssetDatabase.CreateFolder("Assets/CarSales", "Data");
             l = ScriptableObject.CreateInstance<WorldLayout>();
-            l.townVersion = TownPlan.Version;
+            l.townVersion = HarbourPlan.Version;
             AssetDatabase.CreateAsset(l, LayoutPath);
             return l;
         }
 
 
-        /// <summary>True when the given town root carries a final-map marker (Tools > Car Sales > Final Map).</summary>
-        static bool IsFinalMapScene(Transform env) => env && env.GetComponent<TownMapMarker>() is { } marker && marker.townVersion >= CarSales.Sim.FinalMapPlan.Version;
-
+        
         static GameObject BuildingPrefab(string assetId)
         {
             if (string.IsNullOrEmpty(assetId)) return null;
@@ -149,7 +147,7 @@ namespace CarSales.EditorTools
             var net = env.GetComponent<RoadNetwork>();
             if (!net) net = env.AddComponent<RoadNetwork>();
             net.segments = layout.Network();
-            net.lightNodes = (layout && layout.townVersion >= CarSales.Sim.FinalMapPlan.Version || IsFinalMapScene(env.transform) ? CarSales.Sim.FinalMapPlan.LightNodes : TownPlan.LightNodes).ToList();
+            net.lightNodes = CarSales.Sim.HarbourPlan.LightNodes.ToList();
             int swapped = PlaceholderReplacer.ApplyToOpenScene(false);
             EditorUtility.SetDirty(net);
             ApplyMetricUVs(scene);
@@ -159,7 +157,7 @@ namespace CarSales.EditorTools
             return $"{layout.userRoads.Count} road(s) built; traffic network has {net.segments.Count} segments." + (swapped > 0 ? $" {swapped} placeholders use your models." : "");
         }
 
-        /// <summary>Build Everything (and the Final Map): rebuild the sites you added, tag the generated ones, write Layout_DefaultTown.</summary>
+        /// <summary>Build Everything (and Build Harbour City): rebuild the sites you added, tag the generated ones, write Layout_DefaultTown.</summary>
         static void BuildLayoutSites(Transform env, Mats m, CarDisplay displayPrefab, CustomerAI customerPrefab, List<NavMeshSurface> surfaces, bool finalMap = false)
         {
             TagDefaultSites(env);
@@ -172,18 +170,18 @@ namespace CarSales.EditorTools
             if (!net) net = env.gameObject.AddComponent<RoadNetwork>();
             // The town's roads are the plan's roads plus the ones you drew (see WorldLayout.Network).
             net.segments = layout ? layout.Network() : CarSales.Sim.Town.Segments();
-            net.lightNodes = (IsFinalMapScene(env.transform) || (layout && layout.townVersion >= CarSales.Sim.FinalMapPlan.Version) ? CarSales.Sim.FinalMapPlan.LightNodes : TownPlan.LightNodes).ToList();
-            if (!finalMap && layout && layout.townVersion < TownPlan.Version)
+            net.lightNodes = CarSales.Sim.HarbourPlan.LightNodes.ToList();
+            if (!finalMap && layout && layout.townVersion < HarbourPlan.Version)
             {
-                // Phase 12: the town was rebuilt to the master map; sites placed on the old town may now sit in a new zone.
+                // The town plan changed; sites placed on the old layout may now sit in a different zone.
                 if (layout.sites.Count > 0 || layout.userRoads.Count > 0)
-                    Debug.LogWarning($"[Car Sales] The town is now the master-map layout. Your {layout.sites.Count} World Builder site(s) and {layout.userRoads.Count} road(s) " +
+                    Debug.LogWarning($"[Car Sales] The town plan was rebuilt (Harbour City). Your {layout.sites.Count} World Builder site(s) and {layout.userRoads.Count} road(s) " +
                                      "were placed on the old town - open Tools > Car Sales > World Builder > Validate and move any that overlap.");
                 layout.roads.Clear();
-                layout.townVersion = TownPlan.Version;
+                layout.townVersion = HarbourPlan.Version;
                 EditorUtility.SetDirty(layout);
             }
-            if (finalMap) return;   // Layout_DefaultTown documents the master map; the Final Map is built from FinalMapPlan.
+            if (finalMap) return;   // Layout_DefaultTown documents the generated world only; Harbour City is built from HarbourPlan.
 
             // The generated v4 town as a layout (for reference and the validator).
             var def = AssetDatabase.LoadAssetAtPath<WorldLayout>(DefaultLayoutPath);

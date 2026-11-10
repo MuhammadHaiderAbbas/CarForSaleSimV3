@@ -51,10 +51,13 @@ a **credits** screen, **one-click Windows builds** (*Tools → Car Sales → Bui
 **PlayMode test suite** (*Window → General → Test Runner → PlayMode*). Phase 11 adds **animated Mixamo characters**
 (*Tools → Car Sales → Character Setup*: your character becomes the player and an AI cast; V = third person) and
 **building levels 1-3**: buy a building's upgrades, then rebuild it overnight into a completely new, bigger building
-(computer → **Buildings**). Phase 12 (**CarForSaleSimV2**) rebuilds the town to the **master map** (14 zones round a
-test-drive loop with roundabouts), restyles the whole interface to the **V2 UI board** (icons, colours, new menus,
-settings, HUD, phone, fuel station), and adds a **Release Checklist** (*Tools → Car Sales*) that must pass before a
-Steam release build. Phase 13 (**Realism**) puts **real textures on every surface**, adds **Low–Ultra graphics levels**
+(computer → **Buildings**). The town is **Harbour City** (*Tools → Car Sales → 2. Build Everything*): a fictional port
+town — 16 zones (two numbered 14; zone 15 is the Southside Business Park), 25 sites, a ~2.5 km test-drive loop with
+roundabouts, docks in the south-west, the dealership high street, the public park and the business park on Horizon
+Drive and Business Park Road. See [docs/HARBOUR_CITY.md](docs/HARBOUR_CITY.md); per-site model uploads live at
+*Tools → Car Sales → Harbour City → Map Slots…*. The interface was restyled to the **V2 UI board** (icons, colours, new
+menus, settings, HUD, phone, fuel station), and there is a **Release Checklist** (*Tools → Car Sales*) that must pass
+before a Steam release build. Phase 13 (**Realism**) puts **real textures on every surface**, adds **Low–Ultra graphics levels**
 (shadows, ambient occlusion, real street lamps and headlights at night, wet roads in the rain, haze), **furnished
 interiors** and **walk-in homes**, and a **Realism Checklist** (*Tools → Car Sales → Realism*).
 **To make the game look real, follow [docs/REALISM_GUIDE.md](docs/REALISM_GUIDE.md)** (every step, all free sources).
@@ -77,7 +80,7 @@ interiors** and **walk-in homes**, and a **Realism Checklist** (*Tools → Car S
 6. **Tools → Car Sales → 2. Build Everything**.
    - The first time, it may ask you to import **TextMeshPro Essentials**: click *Import TMP Essentials*,
      then run **Build Everything** again.
-7. The scene `Assets/CarSales/Generated/Scenes/DealershipTest.unity` opens. **Press Play** to jump straight in.
+7. The scene `Assets/CarSales/Generated/Scenes/HarbourCity.unity` opens. **Press Play** to jump straight in.
    For the full flow (main menu → game), open **Tools → Car Sales → 4. Open Main Menu Scene** and press Play.
    For a build, both scenes are already in Build Settings (MainMenu first).
 

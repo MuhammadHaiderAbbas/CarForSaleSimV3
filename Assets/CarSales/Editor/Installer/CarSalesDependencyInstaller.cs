@@ -16,7 +16,7 @@ namespace CarSales.Installer
     {
         const string SessionKey = "CarSales.DepsChecked";
         // Input System last: enabling its backend restarts the editor.
-        // com.unity.cloud.gltfast loads the Phase 14 Final Map models (Sketchfab downloads)
+        // com.unity.cloud.gltfast loads the Harbour City models (Sketchfab downloads)
         static readonly string[] Required = { "com.unity.ugui", "com.unity.ai.navigation", "com.unity.test-framework", "com.unity.cloud.gltfast", "com.unity.inputsystem" };
         const string QueueKey = "CarSales.InstallQueue";
         static ListRequest listRequest;

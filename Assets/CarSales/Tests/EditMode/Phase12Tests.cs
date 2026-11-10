@@ -6,38 +6,38 @@ using NUnit.Framework;
 
 namespace CarSales.Tests
 {
-    /// <summary>Phase 12a: the master-map town plan - roads, roundabouts, zones and sites fit together.</summary>
+    /// <summary>Phase 12a: the Harbour City town plan - roads, roundabouts, zones and sites fit together.</summary>
     public class Phase12Tests
     {
         [Test]
-        public void Zones_AreTheFourteenOfTheMasterMap()
+        public void Zones_AreTheFourteenOfHarbourCity()
         {
-            CollectionAssert.AreEqual(Enumerable.Range(1, 14), TownPlan.Zones.Select(z => z.Number).Distinct().OrderBy(n => n));
-            Assert.AreEqual(2, TownPlan.Zones.Count(z => z.Number == 14), "two expansion plots, as on the master map");
-            foreach (var z in TownPlan.Zones) { Assert.Less(z.X0, z.X1, z.Name); Assert.Less(z.Z0, z.Z1, z.Name); }
-            StringAssert.Contains("Test-Drive", TownPlan.Zone(12).Name);
-            StringAssert.Contains("Dealership", TownPlan.Zone(2).Name);
+            CollectionAssert.AreEqual(Enumerable.Range(1, 14), HarbourPlan.Zones.Select(z => z.Number).Distinct().OrderBy(n => n));
+            Assert.AreEqual(2, HarbourPlan.Zones.Count(z => z.Number == 14), "two expansion plots, as in Harbour City");
+            foreach (var z in HarbourPlan.Zones) { Assert.Less(z.X0, z.X1, z.Name); Assert.Less(z.Z0, z.Z1, z.Name); }
+            StringAssert.Contains("Test-Drive", HarbourPlan.Zone(12).Name);
+            StringAssert.Contains("Dealership", HarbourPlan.Zone(2).Name);
         }
 
         [Test]
         public void EverySite_IsInItsZone_OffTheRoads_AndReachable()
         {
-            foreach (var s in TownPlan.Sites)
+            foreach (var s in HarbourPlan.Sites)
             {
-                var zone = TownPlan.ZoneAt(s.Zone, s.Position);
+                var zone = HarbourPlan.ZoneAt(s.Zone, s.Position);
                 Assert.IsTrue(zone.Contains(s.Position, 40f), $"{s.Name} ({s.Position.x}, {s.Position.z}) is in zone {s.Zone} {zone.Name}");
                 var box = s.WorldBox();
-                Assert.IsFalse(TownPlan.BoxTouchesRoad(box), $"{s.Name} footprint {box} sits on a road");
+                Assert.IsFalse(HarbourPlan.BoxTouchesRoad(box), $"{s.Name} footprint {box} sits on a road");
                 // The front of the site (its entrance side) is close to a road.
                 var front = s.ToWorld((s.FX0 + s.FX1) / 2f, s.FZ0 - 2f);
-                Assert.Less(TownPlan.RoadClearance(front), 14f, $"{s.Name}: entrance {front.x:0},{front.z:0} is far from any road");
+                Assert.Less(HarbourPlan.RoadClearance(front), 14f, $"{s.Name}: entrance {front.x:0},{front.z:0} is far from any road");
             }
         }
 
         [Test]
         public void Sites_DontOverlapEachOther()
         {
-            var sites = TownPlan.Sites;
+            var sites = HarbourPlan.Sites;
             for (int i = 0; i < sites.Length; i++)
                 for (int j = i + 1; j < sites.Length; j++)
                 {
@@ -53,8 +53,8 @@ namespace CarSales.Tests
             foreach (var id in new[] { "autoworld", "dealer_downtown", "dealer_luxury", "ServiceCentre", "FuelStation", "MechanicWorkshop", "PartsDirect",
                                        "CarWashCenter", "UsedCarMarket", "AuctionCenter", "MapleClose", "Home_Trailer", "Home_House", "Home_Villa",
                                        "RentalApartments", "OfficeTower", "ParkingGarage" })
-                Assert.IsNotNull(TownPlan.Site(id), id);
-            Assert.AreEqual(TownPlan.Sites.Length, TownPlan.Sites.Select(s => s.Id).Distinct().Count());
+                Assert.IsNotNull(HarbourPlan.Site(id), id);
+            Assert.AreEqual(HarbourPlan.Sites.Length, HarbourPlan.Sites.Select(s => s.Id).Distinct().Count());
         }
 
         [Test]
@@ -70,7 +70,7 @@ namespace CarSales.Tests
         [Test]
         public void RoadNetwork_IsOneConnectedTown()
         {
-            var segs = TownPlan.Segments();
+            var segs = HarbourPlan.Segments();
             var nodes = new List<V2>();
             int Node(V2 p) { int i = nodes.FindIndex(n => V2.Distance(n, p) < 1f); if (i < 0) { nodes.Add(p); i = nodes.Count - 1; } return i; }
             var edges = segs.Select(s => (Node(s.a), Node(s.b))).ToList();
@@ -83,7 +83,7 @@ namespace CarSales.Tests
         [Test]
         public void Traffic_CanDriveEverywhere_NoDeadEnds()
         {
-            var lanes = RoadGraph.Build(TownPlan.Segments(), 9f, 6f, TownPlan.LightNodes);
+            var lanes = RoadGraph.Build(HarbourPlan.Segments(), 9f, 6f, HarbourPlan.LightNodes);
             Assert.Greater(lanes.Count, 60);
             foreach (var l in lanes) Assert.IsNotEmpty(l.next, $"lane {l.id} ({l.start.x:0},{l.start.z:0})->({l.end.x:0},{l.end.z:0}) is a dead end");
             // Every lane can reach every other lane (strongly connected): start anywhere, end anywhere.
@@ -95,10 +95,10 @@ namespace CarSales.Tests
         [Test]
         public void TrafficLights_OnlyAtTheTwoBusyCrossroads()
         {
-            var lanes = RoadGraph.Build(TownPlan.Segments(), 9f, 6f, TownPlan.LightNodes);
+            var lanes = RoadGraph.Build(HarbourPlan.Segments(), 9f, 6f, HarbourPlan.LightNodes);
             var lit = lanes.Where(l => l.endsAtJunction).Select(l => l.end).ToList();
             Assert.IsNotEmpty(lit);
-            foreach (var p in lit) Assert.IsTrue(TownPlan.LightNodes.Any(n => V2.Distance(n, p) < 12f), $"light at {p.x:0},{p.z:0}");
+            foreach (var p in lit) Assert.IsTrue(HarbourPlan.LightNodes.Any(n => V2.Distance(n, p) < 12f), $"light at {p.x:0},{p.z:0}");
         }
 
         [Test]
@@ -127,30 +127,30 @@ namespace CarSales.Tests
         [Test]
         public void Pavements_DontCrossOtherRoads()
         {
-            var pav = TownPlan.Pavements();
+            var pav = HarbourPlan.Pavements();
             Assert.Greater(pav.Count, 20);
             foreach (var (a, b) in pav)
                 for (float t = 0f; t <= 1f; t += 0.1f)
                 {
                     var p = a + (b - a) * t;
-                    Assert.Greater(TownPlan.RoadClearance(p), -0.2f, $"pavement point {p.x:0},{p.z:0} is on a road");
+                    Assert.Greater(HarbourPlan.RoadClearance(p), -0.2f, $"pavement point {p.x:0},{p.z:0} is on a road");
                 }
         }
 
         [Test]
         public void Town_FitsTheMapFrame()
         {
-            var (cx, cz, half) = TownPlan.MapFrame;
-            foreach (var p in TownPlan.Ring)
+            var (cx, cz, half) = HarbourPlan.MapFrame;
+            foreach (var p in HarbourPlan.Ring)
             {
                 Assert.LessOrEqual(Math.Abs(p.x - cx), half);
                 Assert.LessOrEqual(Math.Abs(p.z - cz), half);
             }
-            float w = TownPlan.Ring.Max(p => p.x) - TownPlan.Ring.Min(p => p.x);
-            float h = TownPlan.Ring.Max(p => p.z) - TownPlan.Ring.Min(p => p.z);
+            float w = HarbourPlan.Ring.Max(p => p.x) - HarbourPlan.Ring.Min(p => p.x);
+            float h = HarbourPlan.Ring.Max(p => p.z) - HarbourPlan.Ring.Min(p => p.z);
             Assert.That(w, Is.InRange(950f, 1100f), "about 1 km across");
             Assert.That(h, Is.InRange(420f, 520f));
-            float loop = 0f; for (int i = 0; i < TownPlan.Ring.Length - 1; i++) loop += V2.Distance(TownPlan.Ring[i], TownPlan.Ring[i + 1]);
+            float loop = 0f; for (int i = 0; i < HarbourPlan.Ring.Length - 1; i++) loop += V2.Distance(HarbourPlan.Ring[i], HarbourPlan.Ring[i + 1]);
             Assert.That(loop, Is.InRange(2500f, 3200f), "test-drive loop is 2.5-3 km");
         }
     }

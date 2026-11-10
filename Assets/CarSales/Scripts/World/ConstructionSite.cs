@@ -3,7 +3,7 @@ using UnityEngine;
 namespace CarSales
 {
     /// <summary>
-    /// One of the Final Map's under-construction plots (phase 14).
+    /// One of Harbour City's under-construction plots.
     /// Stage advances deterministically with the day count (see CarSales.Sim.ConstructionStages):
     ///   0 Ground (cleared soil, stakes, fence)  →  1 Site (crane, excavator, mixer, hut)  →  2 Draft (concrete frame)  →  3 Final (finished building).
     /// The builder fills <see cref="stageRoots"/> with four prebuilt groups; this component just toggles them as days pass.
@@ -18,7 +18,7 @@ namespace CarSales
         public int startDay = 1;
         [Tooltip("Whole days per stage.")]
         [Min(1)] public int daysPerStage = 2;
-        [Tooltip("[Ground, Site, Draft, Final] groups built by the Final Map builder.")]
+        [Tooltip("[Ground, Site, Draft, Final] groups built by the Harbour City builder.")]
         public Transform[] stageRoots = new Transform[4];
 
         int shownStage = -1;

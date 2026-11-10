@@ -85,7 +85,7 @@ namespace CarSales
 
         public override void Build()
         {
-            // Phase 12: frame the master-map town.
+            // Frame Harbour City.
             var (cx, cz, half) = CarSales.Sim.Town.MapFrame;
             mapCenter = new Vector3(cx, 0f, cz);
             mapHalfSize = half;

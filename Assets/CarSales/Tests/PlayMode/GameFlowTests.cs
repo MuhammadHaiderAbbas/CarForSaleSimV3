@@ -16,7 +16,7 @@ namespace CarSales.Tests.PlayMode
     /// </summary>
     public class GameFlowTests
     {
-        const string GameScene = "DealershipTest";
+        const string GameScene = "HarbourCity";
         string saveRoot;
         readonly List<string> errors = new List<string>();
 

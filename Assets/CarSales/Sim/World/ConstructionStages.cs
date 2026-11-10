@@ -1,7 +1,7 @@
 namespace CarSales.Sim
 {
     /// <summary>
-    /// The four stages of a building plot (pure C#, used by the Final Map's under-construction sites and the tests):
+    /// The four stages of a building plot (pure C#, used by Harbour City's under-construction sites and the tests):
     ///   0 Ground  — cleared soil, survey stakes, fence and a "DANGER" board;
     ///   1 Site    — machines on site: tower crane, excavator, mixer, site hut, piles of materials;
     ///   2 Draft   — the concrete frame of the final building is up (it got a crane lift away from done);

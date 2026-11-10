@@ -1,5 +1,24 @@
 # Changelog
 
+## v5.0-rc5 — Harbour City (the one town)
+- **New map: Harbour City.** A fictional port town (Portsmouth-inspired): a ~2.5 km **test-drive loop** called the
+  Harbour Loop (eight roundabouts, three lit crossroads), the south-facing **seafront**, a **docks
+  quarter** in the south-west, the dealership beachhead along **Harbour Boulevard**, **Northern Avenue** across the
+  town, **Guildhall Street** and **Station Road** north-south, the **park**, the **industrial estate** and the
+  **Southside Business Park** on Horizon Drive and Business Park Road. 16 zones (two numbered 14; zone 15 is the
+  business park) and 25 sites.
+- **One town, one map.** The old master map (V2) and the Final Map (V3) were deleted; `HarbourPlan.cs` is the only
+  plan. New games, saves, the world map, GPS, traffic and the NavMesh all read it. Old saves open in Harbour City.
+- **Tools → Car Sales → 2. Build Everything** builds Harbour City; `Harbour City → Build Harbour City` rebuilds just
+  the town. The world renders a **sea** along the southern arc now.
+- **Per-site model uploads**: *Tools → Car Sales → Harbour City → Map Slots…* — upload any prefab or GLB per site;
+  at build time the uploaded model replaces the site's generated building (ground, lot lines, fences, signs, lamps
+  and trees are kept).
+- **Wire All Cars Into The Game**: *Tools → Car Sales → Release Checklist → Wire All Cars Into The Game* batch-imports
+  every downloaded car GLB as a buyable, drivable car (measure, wheel detection, paint detection, clear-coat, prefab,
+  CarDefinition, CarDatabase). Names are trademark-cleaned; maker badges in textures are still your job.
+- `tools/plan_check.py` validates the plan (zones, sites off roads, entrances, overlaps, connectivity, roundabouts);
+  `tools/render_plan_map.py` re-renders the map image. Map data: `docs/HARBOUR_CITY_PLAN.md`.
 ## v5.0-rc4 — Phase 13 "Realism"
 - **Real textures on every surface**: asphalt, paving slabs, concrete, brick, painted walls, grass, porcelain and marble
   floors, wood, roof tiles, metal cladding and more, all at their real size. Background buildings have real fronts
