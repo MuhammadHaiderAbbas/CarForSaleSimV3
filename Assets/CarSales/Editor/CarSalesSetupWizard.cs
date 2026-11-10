@@ -672,8 +672,12 @@ namespace CarSales.EditorTools
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene, scenePath);
 
-            // Build settings: the menu, then the Harbour City scene.
-            var list = EditorBuildSettings.scenes.Where(s => s.path != scenePath && s.path != MenuScenePath).ToList();
+            // Build settings: the menu, then the Harbour City scene. Drop any stale entries whose scene file
+            // no longer exists (e.g. DealershipTest.unity from before Harbour City) — a missing scene makes the
+            // PlayMode test player build fail with "incorrect path for a scene file".
+            var list = EditorBuildSettings.scenes
+                .Where(s => File.Exists(s.path) && s.path != scenePath && s.path != MenuScenePath)
+                .ToList();
             list.Insert(0, new EditorBuildSettingsScene(MenuScenePath, true));
             list.Insert(1, new EditorBuildSettingsScene(scenePath, true));
             EditorBuildSettings.scenes = list.ToArray();
